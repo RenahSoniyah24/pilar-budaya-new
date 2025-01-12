@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import { FaHome } from "react-icons/fa";
 import '../../style/css/style.css';
 
+import Notification from '../../Components/Notification';
 import { loginService } from '../../Services/ServicesAPI';
 import User from '../../Store';
 
@@ -26,9 +27,9 @@ function Login(props) {
 
       if (response) {
         localStorage.setItem('status', true)
-        localStorage.setItem('email', response.data.email)
-        localStorage.setItem('username', response.data.username)
-        localStorage.setItem('token', response.data.access_token)
+        localStorage.setItem('email', response.email)
+        localStorage.setItem('username', response.username)
+        localStorage.setItem('token', response.access_token)
   
         setUser({
           status : localStorage.getItem('status'),
@@ -36,13 +37,14 @@ function Login(props) {
           username : localStorage.getItem('username'),
           token : localStorage.getItem('token')
         })
+
+        Notification.success('Selamat Datang', `${response.username}`);
   
         history.push('/') 
       } else {
         throw new Error("Failed to login")
       }
     } catch (err) {
-      debugger
       localStorage.setItem('status', false)
       localStorage.setItem('email', '')
       localStorage.setItem('username', '')
@@ -57,6 +59,7 @@ function Login(props) {
 
       setWarning(err.message)
       console.log(err.message)
+      Notification.warning('Upps, ', err.message);
 
       console.error('Error:', err.message || err);
     }

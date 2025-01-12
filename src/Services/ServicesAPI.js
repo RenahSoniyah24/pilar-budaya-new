@@ -16,9 +16,9 @@ export const loginService = async (email, password) => {
 
     const response = await api.post(endpoints.login, req);
     
-    console.debug('[RESPONSE LOGIN]', response)
+    console.debug('[RESPONSE LOGIN]', response.data)
     
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Error during login:', error.response || error);
     throw error.response ? error.response.data : error;
@@ -32,9 +32,9 @@ export const registerService = async (fullName, username, email, phoneNumber, bi
 
     const response = await api.post(endpoints.register, req);
     
-    console.debug('[RESPONSE REGISTER]', response)
+    console.debug('[RESPONSE REGISTER]', response.data)
     
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Error during REGISTER:', error.response || error);
     throw error.response ? error.response.data : error;

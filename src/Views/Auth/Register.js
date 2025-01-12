@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import { FaHome, FaEye, FaEyeSlash } from "react-icons/fa";
 import '../../style/css/style.css';
 
+import Notification from '../../Components/Notification';
 import { registerService } from '../../Services/ServicesAPI';
 import User from '../../Store';
 
@@ -28,35 +29,25 @@ function Register(props) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
+    debugger
     try {
       const response = await registerService(fullname, username, email, phonenumber, birthdate, password);
 
-      if (response) {
-        localStorage.setItem('status', true)
-        localStorage.setItem('nama', email)
-  
-        // setUser({
-        //   status : localStorage.getItem('status'),
-        //   name : localStorage.getItem('nama')
-        // })
-  
-        history.push('/') 
+      if (response.data) {
+        Notification.success('Daftar Berhasil, ', "Silahkan Login");
+
+        history.push('/login') 
       } else {
         throw new Error("Failed to login")
       }
     } catch (err) {
       debugger
-      localStorage.setItem('status', false)
-      localStorage.setItem('nama', '')
-
-      // setUser({
-      //   status : localStorage.getItem('status'),
-      //   name : localStorage.getItem('nama')
-      // })
 
       setWarning(err.message)
       console.log(err.message)
+
+      Notification.warning('Upps, ', err.message);
+
 
       console.error('Error:', err.message || err);
     }
