@@ -12,7 +12,7 @@ function Profil(props) {
       <Navbar/>
 
         <section className="hero">
-          <img src="assets/images/Penari.png" alt="Penari" />
+          <img src="assets/images/Penari.png" class="img-hero" alt="Penari" />
         </section>
 
         <section className="content-section">

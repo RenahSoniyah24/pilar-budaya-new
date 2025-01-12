@@ -11,7 +11,7 @@ function Home(props) {
     <>
       <Navbar/>
       <section className="hero">
-        <img src="assets/images/pillar-banner.png" alt="Sanggar Pilar Budaya" />
+        <img src="assets/images/pillar-banner.png" style={{width: "100%"}} alt="Sanggar Pilar Budaya" />
       </section>
       <Footer/>
     </>

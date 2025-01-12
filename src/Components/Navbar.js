@@ -36,7 +36,7 @@ function Navbar({ children , props}) {
     <>
       <nav
         className="navbar navbar-expand-lg navbar-dark"
-        style={{backgroundColor: "#000"}}
+        style={{backgroundColor: "#000", padding: "5px"}}
       >
         <div className="container">
           <NavLink className="navbar-brand d-flex align-items-center" to="/">

@@ -59,7 +59,7 @@ function Footer({ children , props}) {
                 <div className="d-flex align-items-center justify-content-left">
                   <h6>Alamat Sanggar:</h6>
                 </div>
-                <div className="d-flex align-items-center justify-content-left">
+                <div className="text-left">
                   <p>Sport Center Puri Gading, Bekasi 17425</p>
                 </div>
 
