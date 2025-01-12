@@ -4,6 +4,7 @@ import * as Middleware from '../Middleware/Middleware';
 
 // page base
 import Login from '../Views/Auth/Login';
+import Register from '../Views/Auth/Register';
 import NotFound from '../Views/Errors/NotFound';
 
 // page Landing
@@ -33,6 +34,9 @@ function Router(props) {
         </Route> */}
         <Route path='/login'>
           <Middleware.Guest render={<Login/>}/>
+        </Route>
+        <Route path='/register'>
+          <Middleware.Guest render={<Register/>}/>
         </Route>
         <Route path='*'>
           <NotFound/>

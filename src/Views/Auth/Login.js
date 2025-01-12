@@ -1,88 +1,69 @@
 import React, { useState } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import User from '../../Store';
 import { FaHome } from "react-icons/fa";
 import '../../style/css/style.css';
+
+import { loginService } from '../../Services/ServicesAPI';
+import User from '../../Store';
 
 
 function Login(props) {
 
   const [user, setUser]           = useRecoilState(User)
-  const [username, setUsername]   = useState('')
+  const [email, setEmail]         = useState('')
   const [katasandi, setKatasandi] = useState('')
   const [warning, setWarning]     = useState('')
   const history                   = useHistory()
 
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (katasandi === 'Password123') {
-      localStorage.setItem('status', true)
-      localStorage.setItem('nama', username)
+    try {
+      const response = await loginService(email, katasandi);
+      debugger
 
-      setUser({
-        status : localStorage.getItem('status'),
-        name : localStorage.getItem('nama')
-      })
-
-      history.push('/')
-    }else{
+      if (response) {
+        localStorage.setItem('status', true)
+        localStorage.setItem('email', response.data.email)
+        localStorage.setItem('username', response.data.username)
+        localStorage.setItem('token', response.data.access_token)
+  
+        setUser({
+          status : localStorage.getItem('status'),
+          email : localStorage.getItem('email'),
+          username : localStorage.getItem('username'),
+          token : localStorage.getItem('token')
+        })
+  
+        history.push('/') 
+      } else {
+        throw new Error("Failed to login")
+      }
+    } catch (err) {
+      debugger
       localStorage.setItem('status', false)
-      localStorage.setItem('nama', '')
+      localStorage.setItem('email', '')
+      localStorage.setItem('username', '')
+      localStorage.setItem('token', '')
 
       setUser({
         status : localStorage.getItem('status'),
-        name : localStorage.getItem('nama')
+        email : localStorage.getItem('email'),
+        username : localStorage.getItem('username'),
+        token : localStorage.getItem('token')
       })
 
-      setWarning('Katasandi Salah')
-      console.log('katasandi salah')
-    }
+      setWarning(err.message)
+      console.log(err.message)
 
-    console.log(user)
+      console.error('Error:', err.message || err);
+    }
   }
 
   return (
     <div>
-      {/* <div className="container">
-        <div className="d-flex justify-content-center align-items-center vh-100">
-          <div className="card">
-            <div className="card-header">
-              <div className="logo">
-                <img src="assets/icon/logo.png" alt="Pilar Budaya Logo"/>
-                <h4 className="text-uppercase mt-2 text-white">Pilar Budaya</h4>
-              </div>
-            </div>
-            <div className="card-body">
-              {
-                warning !== '' ?
-                  <div className="alert alert-danger" role="alert">
-                    {warning}
-                  </div>
-                :
-                  <></>
-              }
-              <form onSubmit={submitHandler}>
-                <div className="mb-3">
-                  <label htmlFor="">Username</label>
-                  <input type="text" name="username" id="username" className="form-control" value={username} onChange={(e)=>setUsername(e.target.value)}/>
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="">Password</label>
-                  <input type="password" name="password" id="password" className="form-control" value={katasandi} onChange={(e)=>setKatasandi(e.target.value)}/>
-                </div>
-                <div className="gap-2 d-grid">
-                  <button className="btn btn-block btn-primary" type='submit'>Masuk</button>
-                </div>
-              </form>
-            </div>         
-          </div>
-        </div>
-      </div> */}
-
       <section className="ftco-section">
         <div className="container">
           <div className="row justify-content-center">
@@ -109,37 +90,49 @@ function Login(props) {
                       </p>
                     </div>
                   </div>
-                  <form action="#" className="signin-form">
+                  {
+                    warning !== '' ?
+                      <div className="alert alert-danger" role="alert">
+                        {warning}
+                      </div>
+                    :
+                      <></>
+                  }
+                  <form onSubmit={submitHandler} className="signin-form">
                     <div className="form-group mb-3">
-                      <label className="label" for="name">Email</label>
+                      <label className="label">Email</label>
                       <input 
                         type="email" 
                         className="form-control" 
                         placeholder="Email" 
                         id="email" 
+                        value={email} 
+                        onChange={(e)=>setEmail(e.target.value)}
                         required 
                       />
                     </div>
                     <div className="form-group mb-3">
-                      <label className="label" for="password">Password</label>
-                      <input type="password" className="form-control" placeholder="Password" required />
+                      <label className="label">Password</label>
+                      <input 
+                        type="password" 
+                        className="form-control" 
+                        placeholder="Password" 
+                        value={katasandi} 
+                        onChange={(e)=>setKatasandi(e.target.value)}
+                        required 
+                        checked
+                      />
                     </div>
                     <div className="form-group">
-                      <button type="submit" className="form-control btn btn-primary rounded submit px-3">Sign In</button>
+                      <button type="submit" className="form-control btn btn-primary rounded submit px-3">Masuk</button>
                     </div>
                     <div className="form-group d-md-flex">
-                      <div className="w-50 text-left">
-                        <label className="checkbox-wrap checkbox-primary mb-0">Remember Me
-                        <input type="checkbox" checked/>
-                        <span className="checkmark"></span>
-                        </label>
-                      </div>
-                      <div className="w-50 text-md-right">
+                      {/* <div className="w-50 text-md-right">
                         <a href="#">Forgot Password</a>
-                      </div>
+                      </div> */}
                     </div>
                   </form>
-                  <p className="text-center">Not a member? <a data-toggle="tab" href="#signup">Sign Up</a></p>
+                  <div className="text-center">Belum Punya Akun? <NavLink className="nav-link fw-bolder" to="/register" style={{display: "contents"}} exact>Daftar</NavLink></div>
                 </div>
               </div>
             </div>

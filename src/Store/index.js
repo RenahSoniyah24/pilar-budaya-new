@@ -4,7 +4,9 @@ const User = atom({
   key : 'User',
   default : {
     status : localStorage.getItem('status'),
-    name : localStorage.getItem('nama')
+    email : localStorage.getItem('email'),
+    // username : localStorage.getItem('username'),
+    // token : localStorage.getItem('token')
   }
 })
 

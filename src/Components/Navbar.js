@@ -7,7 +7,7 @@ import Authenticated from '../Context/Authenticated';
 import User from '../Store';
 
 function Navbar({ children , props}) {
-  const {name}            = useRecoilValue(User)
+  const {email}           = useRecoilValue(User)
   const [user, setUser]   = useRecoilState(User)
   const history           = useHistory()
 
@@ -15,11 +15,15 @@ function Navbar({ children , props}) {
     e.preventDefault();
     try {
       localStorage.setItem('status', false)
-      localStorage.setItem('nama', '')
+      localStorage.setItem('email', '')
+      localStorage.setItem('username', '')
+      localStorage.setItem('token', '')
 
       setUser({
         status : localStorage.getItem('status'),
-        name   : localStorage.getItem('nama')
+        email : localStorage.getItem('email'),
+        username : localStorage.getItem('username'),
+        token : localStorage.getItem('token')
       })
 
       history.push('/login')
@@ -78,8 +82,19 @@ function Navbar({ children , props}) {
               }
             </ul>
             <div className="d-flex">
-              <NavLink className="btn btn-warning ms-3 px-4" activeClassName='text-warning' to="/register" exact>Daftar</NavLink>
-              <NavLink className="btn btn-warning ms-3 px-4" to="/login" exact>Masuk</NavLink>
+              {
+                user.status === 'true'?
+                  <>
+                    <div className='my-3 d-flex align-items-center'>{email}</div>
+                    <NavLink className='btn btn-outline-warning btn-sm my-4 mx-2 px-4' to="/dashboard" exact>Dashboard</NavLink>
+                    <button className='btn btn-danger btn-sm my-4 mx-2 px-4' onClick={logout}>Logout</button>
+                  </>
+                :
+                  <>
+                    <NavLink className="btn btn-warning ms-3 px-4" activeClassName='text-warning' to="/register" exact>Daftar</NavLink>
+                    <NavLink className="btn btn-warning ms-3 px-4" to="/login" exact>Masuk</NavLink>
+                  </>
+              }
             </div>
           </div>
         </div>

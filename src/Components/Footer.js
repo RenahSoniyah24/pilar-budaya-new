@@ -1,33 +1,8 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import User from '../Store';
 
 function Footer({ children , props}) {
-  const {name}            = useRecoilValue(User)
-  const [user, setUser]   = useRecoilState(User)
   const history           = useHistory()
-
-  const logout = (e) => {
-    e.preventDefault();
-    try {
-      localStorage.setItem('status', false)
-      localStorage.setItem('nama', '')
-
-      setUser({
-        status : localStorage.getItem('status'),
-        name   : localStorage.getItem('nama')
-      })
-
-      history.push('/login')
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
-
-  useEffect(()=>{
-    console.log(user)
-  },[user])
 
   return (
     <>
