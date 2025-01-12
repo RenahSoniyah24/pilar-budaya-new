@@ -1,0 +1,29 @@
+.card-container {
+  perspective: 1000px; // Memberikan efek kedalaman 3D
+  .card {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s ease;
+    transform-style: preserve-3d;
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    h3 {
+      margin: 10px 0;
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+  }
+}

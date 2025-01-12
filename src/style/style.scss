@@ -1,0 +1,108 @@
+// Variabel
+$primary-color: #f90;
+$background-color: #000;
+$text-color: #fff;
+
+// Global Styles
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+// Navbar
+.navbar {
+  padding: 30px; // Padding atas dan bawah 30px
+}
+
+// Hero Section
+.hero-container {
+  width: 100%;          // Kontainer selebar layar
+  background-color: #fff; // Warna latar jika perlu
+  overflow: hidden;     // Sembunyikan bagian yang melampaui kontainer (opsional)
+
+  img {
+    display: block;       // Hilangkan spasi inline bawaan <img>
+    width: 100%;          // Lebar penuh kontainer
+    height: auto;         // Tinggi menyesuaikan rasio aslinya
+    max-height: 600px;    // Batas tinggi agar tidak terlalu menjulang
+  }
+}
+
+// Content Section
+.content-section {
+  height: 50%;
+  padding: 50px 30px;
+
+  h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin: 0 0 60px;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 50px;
+      height: 4px;
+      background: $primary-color;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+// Footer
+.footer {
+  background-color: $background-color;
+  color: $text-color;
+  padding: 17px 0;
+  text-align: center;
+
+  a {
+    color: $primary-color;
+    margin: 0 10px;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+
+.card
+ {
+  background: #000;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+
+  h3 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: #aaa;
+  }
+
+  &:hover {
+    transform: translateY(-10px);
+  }
+}
+
+.trainer-card {
+  max-width: 300px;
+}
