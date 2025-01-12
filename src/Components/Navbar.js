@@ -65,7 +65,7 @@ function Navbar({ children , props}) {
                 <NavLink className='nav-link' activeClassName='text-warning' to="/informasi" exact>Informasi</NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className='nav-link' activeClassName='text-warning' to="/galery" exact>Galeri Sanggar</NavLink>
+                <NavLink className='nav-link' activeClassName='text-warning' to="/gallery" exact>Galeri Sanggar</NavLink>
               </li>
 
               {
@@ -78,8 +78,8 @@ function Navbar({ children , props}) {
               }
             </ul>
             <div className="d-flex">
-              <a className="btn btn-warning ms-3 px-4" href="#daftar">Daftar</a>
-              <a className="btn btn-outline-warning ms-3 px-4" href="#masuk">Masuk</a>
+              <NavLink className="btn btn-warning ms-3 px-4" activeClassName='text-warning' to="/register" exact>Daftar</NavLink>
+              <NavLink className="btn btn-warning ms-3 px-4" to="/login" exact>Masuk</NavLink>
             </div>
           </div>
         </div>

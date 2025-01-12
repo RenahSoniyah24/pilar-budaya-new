@@ -26,4 +26,30 @@
       color: #aaa;
     }
   }
+
+  .card-gallery {
+    background: rgba(0, 0, 0, 0);
+    color: #000000;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    transition: transform 0.1s ease;
+    transform-style: preserve-3d;
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    h3 {
+      margin: 10px 0;
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+  }
 }

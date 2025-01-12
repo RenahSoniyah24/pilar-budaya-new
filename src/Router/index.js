@@ -10,6 +10,7 @@ import NotFound from '../Views/Errors/NotFound';
 import Home from '../Views/Landing/Home';
 import Profil from '../Views/Landing/Profil';
 import Informasi from '../Views/Landing/Informasi/Index';
+import Gallery from '../Views/Landing/GallerySanggar/Index';
 
 function Router(props) {
   return (
@@ -23,6 +24,9 @@ function Router(props) {
         </Route>
         <Route exact path='/informasi'>
           <Informasi/>
+        </Route>
+        <Route exact path='/gallery'>
+          <Gallery/>
         </Route>
         {/* <Route path='/list'>
           <Middleware.Authenticate render={<Listdata/>}/>
