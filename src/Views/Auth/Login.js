@@ -33,10 +33,9 @@ function Login(props) {
         }
         
         storeSecureData(response);
-        localStorage.setItem('status', true)
 
         setUser({
-          status : localStorage.getItem('status'),
+          status : '',
           email : response.email,
           username : response.username,
           token : response.access_token
@@ -50,10 +49,9 @@ function Login(props) {
       }
     } catch (err) {
       removeSecureData()
-      localStorage.setItem('status', false)
 
       setUser({
-        status : localStorage.getItem('status'),
+        status : '',
         email : '',
         username : '',
         token : '',

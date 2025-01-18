@@ -15,10 +15,9 @@ function Navbar({ children , props}) {
     e.preventDefault();
     try {
       removeSecureData()
-      localStorage.setItem('status', false);
 
       setUser({
-        status : localStorage.getItem('status'),
+        status : '',
         email : '',
         username : '',
         token : ''

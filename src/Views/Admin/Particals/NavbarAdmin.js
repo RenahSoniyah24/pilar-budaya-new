@@ -21,10 +21,9 @@ function NavbarAdmin({ sidebar, onEmit }) {
     try {
       
       removeSecureData()
-      localStorage.setItem('status', false);
 
       setUser({
-        status: localStorage.getItem('status'),
+        status: '',
         email: '',
         username: '',
         token: '',
