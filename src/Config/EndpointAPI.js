@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3000'; 
+const API_BASE_URL = 'https://pilar-budaya.vercel.app'; 
 
 const endpoints = {
   login: `${API_BASE_URL}/user/login`,

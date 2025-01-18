@@ -13,6 +13,15 @@ import Profil from '../Views/Landing/Profil';
 import Informasi from '../Views/Landing/Informasi/Index';
 import Gallery from '../Views/Landing/GallerySanggar/Index';
 
+// admin
+import Dashboard from '../Views/Admin/Page/Dashboard';
+import Iuran from '../Views/Admin/Page/Iuran/Index';
+import IuranDetail from '../Views/Admin/Page/Iuran/Detail';
+import Akun from '../Views/Admin/Page/Akun';
+import Post from '../Views/Admin/Page/Post/Index';
+import Form from '../Views/Admin/Page/Post/FormPost';
+import Profile from '../Views/Admin/Page/Profile/Index';
+
 function Router(props) {
   return (
     <BrowserRouter>
@@ -29,9 +38,30 @@ function Router(props) {
         <Route exact path='/gallery'>
           <Gallery/>
         </Route>
-        {/* <Route path='/list'>
-          <Middleware.Authenticate render={<Listdata/>}/>
-        </Route> */}
+        <Route path='/dashboard'>
+          <Middleware.Authenticate render={<Dashboard/>}/>
+        </Route>
+        <Route path='/iuran' exact>
+          <Middleware.Authenticate render={<Iuran/>}/>
+        </Route>
+        <Route path='/iuran/:identifier'>
+          <Middleware.Authenticate render={<IuranDetail/>}/>
+        </Route>
+        <Route path='/akun'>
+          <Middleware.Authenticate render={<Akun/>}/>
+        </Route>
+        <Route path='/post' exact>
+          <Middleware.Authenticate render={<Post/>}/>
+        </Route>
+        <Route path='/post/form' exact>
+          <Middleware.Authenticate render={<Form/>}/>
+        </Route>
+        <Route path='/post/form' exact>
+          <Middleware.Authenticate render={<Form/>}/>
+        </Route>
+        <Route path='/profile' exact>
+          <Middleware.Authenticate render={<Profile/>}/>
+        </Route>
         <Route path='/login'>
           <Middleware.Guest render={<Login/>}/>
         </Route>

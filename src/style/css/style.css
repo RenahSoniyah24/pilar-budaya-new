@@ -49,6 +49,26 @@ html {
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block; }
 
+.dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dropzone:hover {
+  background-color: #e6e6e6;
+}
+
+.dropzone p {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -671,11 +691,34 @@ pre {
 .offset-3 {
   margin-left: 25%; }
 
+.option-navbar-pilar {
+  box-shadow: 3px 2px 0px 1px #888888;
+  border-left: 1px solid #c4c6c9 !important;
+  border-bottom: 1px solid #888888 !important;
+  border-top: 0 !important;
+  border-right: 0 !important;
+}
+
 .offset-4 {
   margin-left: 33.33333%; }
 
 .offset-5 {
   margin-left: 41.66667%; }
+
+.navbar .dropdown-menu {
+  right: 0; /* Tetap di sisi kanan */
+  left: auto; /* Hindari tumpang tindih ke kiri */
+  transform: translateX(0); /* Reset posisi default */
+  max-width: calc(100vw - 1rem); /* Agar tetap dalam viewport di layar kecil */
+  overflow-wrap: break-word; /* Memastikan teks tidak melampaui batas */
+}
+
+@media (max-width: 768px) {
+  .navbar .dropdown-menu {
+    right: 0; /* Tetap di kanan untuk tampilan mobile */
+    left: auto;
+  }
+}
 
 .offset-6 {
   margin-left: 50%; }
@@ -5396,6 +5439,15 @@ button.bg-danger:hover,
 button.bg-danger:focus {
   background-color: #bd2130 !important; }
 
+.bg-pink {
+  background-color: #ff818d !important; }
+
+a.bg-pink:hover, a.bg-pink:focus,
+button.bg-pink:hover,
+button.bg-pink:focus {
+  background-color: #f69aa3 !important; }
+  
+
 .bg-light {
   background-color: #f8f9fa !important; }
 
@@ -8162,7 +8214,7 @@ h1, h2, h3, h4, h5,
   background: #e3b04b !important; }
 
 .ftco-section {
-  padding: 1.5em 0; 
+  padding: 1.5em 0 5em 0;
   background-color: #fff9ec;
 }
 
