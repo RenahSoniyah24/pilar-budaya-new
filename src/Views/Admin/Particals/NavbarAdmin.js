@@ -4,11 +4,13 @@ import { useHistory } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import User from '../../../Store';
 import '../../../style/css/style.css';
+import { removeSecureData, getSecureData } from '../../../Utils/Protect';
 
 function NavbarAdmin({ sidebar, onEmit }) {
   const [user, setUser] = useRecoilState(User);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [userData, setUserData] = useState({});
   const history = useHistory();
+
 
   const toggleSidebar = () => {
     onEmit(!sidebar);
@@ -17,16 +19,15 @@ function NavbarAdmin({ sidebar, onEmit }) {
   const logout = (e) => {
     e.preventDefault();
     try {
+      
+      removeSecureData()
       localStorage.setItem('status', false);
-      localStorage.setItem('email', '');
-      localStorage.setItem('username', '');
-      localStorage.setItem('token', '');
 
       setUser({
         status: localStorage.getItem('status'),
-        email: localStorage.getItem('email'),
-        username: localStorage.getItem('username'),
-        token: localStorage.getItem('token'),
+        email: '',
+        username: '',
+        token: '',
       });
 
       history.push('/login');
@@ -35,13 +36,15 @@ function NavbarAdmin({ sidebar, onEmit }) {
     }
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+  const HandlingGetUserData = () => {
+    const data = getSecureData();
+    if (data) setUserData(data);
+    else setUserData({})
+  }
 
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
-  };
+  useEffect(() => {
+    HandlingGetUserData()
+  }, [user]);
 
   return (
     <>
@@ -63,7 +66,7 @@ function NavbarAdmin({ sidebar, onEmit }) {
                 alt=""
                 style={{ width: 40, height: 40 }}
               />
-              <span className="d-none d-lg-inline-flex">John Doe</span>
+              <span className="d-none d-lg-inline-flex">{userData?.username ?? ''}</span>
             </a>
             <div className="dropdown-menu dropdown-menu-end bg-light rounded-0 rounded-bottom option-navbar-pilar m-0">
               <NavLink to="/profile" className="dropdown-item">

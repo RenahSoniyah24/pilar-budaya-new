@@ -1,16 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { NavLink } from 'react-router-dom';
 import User from '../../../Store';
 import { FaFileAlt, FaRegUser, FaWallet } from "react-icons/fa";
 import { GiPieChart } from "react-icons/gi";
+import { getSecureData } from '../../../Utils/Protect';
 
 function SidebarAdmin({ children , sidebar}) {
 
   const [user, setUser]   = useRecoilState(User)
+  const [userData, setUserData] = useState({});
+
+  const HandlingGetUserData = () => {
+    const data = getSecureData();
+    if (data) setUserData(data);
+    else setUserData({})
+  }
 
   useEffect(()=>{
-    console.log(user)
+    HandlingGetUserData()
   },[user])
 
   return (
@@ -18,11 +26,11 @@ function SidebarAdmin({ children , sidebar}) {
       {/* Sidebar Start */}
       <div className={`sidebar pe-4 pb-3 ${sidebar ? 'open' : ''}`}>
         <nav className="navbar bg-light navbar-light">
-          <a href="index.html" className="navbar-brand mx-4 mb-3">
+          <NavLink to='/' className="navbar-brand mx-4 mb-3">
             <h3 className="text-primary">
               PILAR BUDAYA
             </h3>
-          </a>
+          </NavLink>
           <div className="d-flex align-items-center ms-4 mb-4">
             <div className="position-relative">
               <img
@@ -34,8 +42,8 @@ function SidebarAdmin({ children , sidebar}) {
               <div className="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1" />
             </div>
             <div className="ms-3">
-              <h6 className="mb-0">Jhon Doe</h6>
-              <span>Admin</span>
+              <h6 className="mb-0">{userData?.username ?? ''}</h6>
+              <span>Pengguna</span>
             </div>
           </div>
           <div className="navbar-nav w-100">

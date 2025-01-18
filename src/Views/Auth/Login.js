@@ -6,6 +6,7 @@ import '../../style/css/style.css';
 
 import Notification from '../../Components/Notification';
 import { loginService } from '../../Services/ServicesAPI';
+import { storeSecureData, removeSecureData } from '../../Utils/Protect';
 import User from '../../Store';
 
 
@@ -22,20 +23,23 @@ function Login(props) {
     e.preventDefault();
 
     try {
-      const response = await loginService(email, katasandi);
+      let response = await loginService(email, katasandi);
       debugger
 
       if (response) {
+        response = {
+          ...response,
+          datetimeExpired: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+        }
+        
+        storeSecureData(response);
         localStorage.setItem('status', true)
-        localStorage.setItem('email', response.email)
-        localStorage.setItem('username', response.username)
-        localStorage.setItem('token', response.access_token)
-  
+
         setUser({
           status : localStorage.getItem('status'),
-          email : localStorage.getItem('email'),
-          username : localStorage.getItem('username'),
-          token : localStorage.getItem('token')
+          email : response.email,
+          username : response.username,
+          token : response.access_token
         })
 
         Notification.success('Selamat Datang', `${response.username}`);
@@ -45,16 +49,14 @@ function Login(props) {
         throw new Error("Failed to login")
       }
     } catch (err) {
+      removeSecureData()
       localStorage.setItem('status', false)
-      localStorage.setItem('email', '')
-      localStorage.setItem('username', '')
-      localStorage.setItem('token', '')
 
       setUser({
         status : localStorage.getItem('status'),
-        email : localStorage.getItem('email'),
-        username : localStorage.getItem('username'),
-        token : localStorage.getItem('token')
+        email : '',
+        username : '',
+        token : '',
       })
 
       setWarning(err.message)

@@ -1,29 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Auth } from '../Context/Auth';
-import Authenticated from '../Context/Authenticated';
 import User from '../Store';
+import { removeSecureData, getSecureData } from '../Utils/Protect';
 
 function Navbar({ children , props}) {
   const {email}           = useRecoilValue(User)
   const [user, setUser]   = useRecoilState(User)
+  const [userData, setUserData] = useState({});
   const history           = useHistory()
 
   const logout = (e) => {
     e.preventDefault();
     try {
-      localStorage.setItem('status', false)
-      localStorage.setItem('email', '')
-      localStorage.setItem('username', '')
-      localStorage.setItem('token', '')
+      removeSecureData()
+      localStorage.setItem('status', false);
 
       setUser({
         status : localStorage.getItem('status'),
-        email : localStorage.getItem('email'),
-        username : localStorage.getItem('username'),
-        token : localStorage.getItem('token')
+        email : '',
+        username : '',
+        token : ''
       })
 
       history.push('/login')
@@ -32,8 +30,14 @@ function Navbar({ children , props}) {
     }
   }
 
+  const HandlingGetUserData = () => {
+    const data = getSecureData();
+    if (data) setUserData(data);
+    else setUserData({})
+  }
+
   useEffect(()=>{
-    console.log(user)
+    HandlingGetUserData()
   },[user])
 
   return (
@@ -71,23 +75,41 @@ function Navbar({ children , props}) {
               <li className="nav-item">
                 <NavLink className='nav-link' activeClassName='text-warning' to="/gallery" exact>Galeri Sanggar</NavLink>
               </li>
-
-              {
-                user.status === 'true' ?
-                  <>
-                    {/* <NavLink className='nav-link' activeClassName='text-warning' to="/list">List Data</NavLink> */}
-                  </>
-                :
-                  <></>
-              }
             </ul>
             <div className="d-flex">
+
               {
                 user.status === 'true'?
                   <>
-                    <div className='my-3 d-flex align-items-center'>{email}</div>
+                    {/* <div className='my-3 d-flex align-items-center'>{email}</div>
                     <NavLink className='btn btn-outline-warning btn-sm my-4 mx-2 px-4' to="/dashboard" exact>Dashboard</NavLink>
-                    <button className='btn btn-danger btn-sm my-4 mx-2 px-4' onClick={logout}>Logout</button>
+                    <button className='btn btn-danger btn-sm my-4 mx-2 px-4' onClick={logout}>Logout</button> */}
+
+                    <div className="navbar-nav align-items-center ms-auto">
+                      <div className="nav-item dropdown">
+                        <a
+                          href="#"
+                          className="nav-link dropdown-toggle"
+                          data-bs-toggle="dropdown"
+                        >
+                          <img
+                            className="rounded-circle me-lg-2"
+                            src={`${process.env.PUBLIC_URL}/assets/icon/user.webp`}
+                            alt=""
+                            style={{ width: 40, height: 40 }}
+                          />
+                          <span className="d-none d-lg-inline-flex">{userData?.username ?? ''}</span>
+                        </a>
+                        <div className="dropdown-menu dropdown-menu-end bg-light rounded-0 rounded-bottom option-navbar-pilar m-0">
+                          <NavLink to="/profile" className="dropdown-item">
+                            My Profil
+                          </NavLink>
+                          <a href="#" onClick={logout} className="dropdown-item">
+                            Log Out
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   </>
                 :
                   <>
