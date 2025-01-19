@@ -29,7 +29,6 @@ function Register(props) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    debugger
     try {
       const response = await registerService(fullname, username, email, phonenumber, birthdate, password);
 
@@ -41,8 +40,6 @@ function Register(props) {
         throw new Error("Failed to login")
       }
     } catch (err) {
-      debugger
-
       setWarning(err.message)
       console.log(err.message)
 

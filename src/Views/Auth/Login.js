@@ -24,12 +24,12 @@ function Login(props) {
 
     try {
       let response = await loginService(email, katasandi);
-      debugger
 
       if (response) {
         response = {
           ...response,
           datetimeExpired: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+          id: 1,
         }
         
         storeSecureData(response);

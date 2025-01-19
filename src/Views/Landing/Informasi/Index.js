@@ -1,22 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../../../Components/Navbar';
 import Footer from '../../../Components/Footer';
 import Card from './ImageCard';
 import '../../../style/style.scss';
+import '../../../style/cardModule.scss';
+import { getGalleryService } from '../../../Services/ServicesAPI';
 
 function Informasi(props) {
-  const dancers = [
-    { image: 'assets/images/tari/1.jpg', name: 'Diana Kartika Putri' },
-    { image: 'assets/images/tari/2.jpg', name: 'Ndaru Dwi Rahayu' },
-    { image: 'assets/images/tari/3.jpg', name: 'Meira Putri Nuraini' },
-    { image: 'assets/images/tari/4.jpg', name: 'Mutiara Fadillah Haren' },
-    { image: 'assets/images/tari/5.jpg', name: 'Fifteen Seputeri M.M' },
-    { image: 'assets/images/tari/6.jpg', name: 'Arida Azkiah Anam' },
-    { image: 'assets/images/tari/7.jpg', name: 'Elita Damayanti Putri' },
-    { image: 'assets/images/tari/8.jpg', name: 'Nimatul Winanne M.' },
-  ];
+  const [loading, setLoading]   = useState(false);
+  const [dancers, setDancers]   = useState([]);
 
-  useEffect(()=>{
+  // fetch server side
+  const fetchData = async () => {
+    setLoading(true);
+    
+    let response = await getGalleryService();
+
+    if (response) {
+      setDancers(response.content);
+      setLoading(false);
+    } else {
+      setDancers([]);
+      setLoading(false);
+    }
+  };
+
+  useEffect(async()=>{
+    await fetchData();
   },[])
 
   return (
@@ -26,13 +36,99 @@ function Informasi(props) {
       <section className="content-section py-5">
         <h1 className="text-center mb-5">Pelatih Pilar Budaya</h1>
         <div className="row my-5 d-flex align-items-center justify-content-center">
-          {dancers.map((dancer, index) => (
-            <Card
-              key={index}
-              image={dancer.image}
-              name={dancer.name}
-            />
-          ))}
+          {loading ? 
+            (
+              <>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div
+                    className="px-0 py-0 card-gallery justify-content-center"
+                  >
+                    <div>
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div
+                    className="px-0 py-0 card-gallery justify-content-center"
+                  >
+                    <div>
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div
+                    className="px-0 py-0 card-gallery justify-content-center"
+                  >
+                    <div>
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div
+                    className="px-0 py-0 card-gallery justify-content-center"
+                  >
+                    <div>
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div
+                    className="px-0 py-0 card-gallery justify-content-center"
+                  >
+                    <div>
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div
+                    className="px-0 py-0 card-gallery justify-content-center"
+                  >
+                    <div>
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div
+                    className="px-0 py-0 card-gallery justify-content-center"
+                  >
+                    <div>
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div
+                    className="px-0 py-0 card-gallery justify-content-center"
+                  >
+                    <div>
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) :
+              dancers.map((dancer, index) => (
+                <Card
+                  key={index}
+                  image={dancer.imageUrl}
+                  name={dancer.contentName}
+                />
+              ))
+          }
         </div>
         <div className="info-section">
           <div className='d-flex align-items-center justify-content-center'>

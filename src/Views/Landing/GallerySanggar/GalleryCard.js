@@ -1,10 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../../../style/style.scss';
 import '../../../style/cardModule.scss';
 import { gsap } from "gsap";
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { getFileIdFromDriveUrl } from '../../../../src/Formatter/Text';
 
 function GalleryCard({ image, name }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [imageParse, setImageParse] = useState('');
   const cardRef = useRef(null);
 
   const handleMouseMove = (e) => {
@@ -41,7 +44,13 @@ function GalleryCard({ image, name }) {
         }, 
       }
     );
-  }, []);
+
+    // Formatter image hanya jika `image` ada
+    if (image) {
+      const parsedImage = getFileIdFromDriveUrl(image);
+      setImageParse(parsedImage);
+    }
+  }, [image]);
 
   return (
     <>
@@ -49,7 +58,24 @@ function GalleryCard({ image, name }) {
         className="card-container col-md-4 col-sm-12 mx-1 my-1"
       >
         <div className="px-0 py-0 card-gallery justify-content-center" ref={cardRef}>
-          <img onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} src={image} alt={name} />
+          <img 
+            onMouseMove={handleMouseMove} 
+            onMouseLeave={handleMouseLeave} 
+            style={{
+              width: '300px', // Lebar gambar
+              height: '400px', // Tinggi gambar
+              objectFit: 'cover', // Menjaga agar gambar tidak terdistorsi
+              borderRadius: '8px', // Opsi sudut bulat
+            }}
+            src={imageParse ? `https://drive.google.com/thumbnail?id=${imageParse}` : 'assets/images/default-image-payment.webp'} 
+            alt={name} 
+            onLoad={() => setIsLoading(false)}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'assets/images/default-image-payment.webp';
+              setIsLoading(false);
+            }}
+            />
           <div>
             {name}
           </div>

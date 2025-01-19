@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { FaRegUser, FaCheck } from "react-icons/fa";
+import Swal from 'sweetalert2';
 
 import 'antd/dist/reset.css';
 import { Table } from 'antd';
-import qs from 'qs';
 import {  
   coloumn_post,
 } from '../../../../Constant/DataColoumn';
 import { NavLink } from 'react-router-dom';
 import {  
-  formatName
+  getFileIdFromDriveUrl
 } from '../../../../Formatter/Text';
+import Notification from '../../../../Components/Notification';
+import { getAllContentService, deleteContentService } from '../../../../Services/ServicesAPI';
 
 import Admin from '../../Index';
 
 function Post(props) {
   const [mode, setMode]               = useState('Pengguna');
   const [dataTable, setDataTable]     = useState([]);
+  const [isLoading, setIsLoading]     = useState(true);
   const [loading, setLoading]         = useState(false);
   const [dataModal, setDataModal]     = useState({});
   const [tableParams, setTableParams] = useState({
@@ -26,30 +29,43 @@ function Post(props) {
     },
   });
 
-  // ---- dummy request for data
-  const getRandomuserParams = (params) => ({
-    results: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    ...params,
-  });
-  // -----
-
   // fetch server side
-  const fetchData = () => {
+  const fetchData = async () => {
     setLoading(true);
-    fetch(`https://randomuser.me/api?${qs.stringify(getRandomuserParams(tableParams))}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        setDataTable(results);
-        setLoading(false);
-        setTableParams({
-          ...tableParams,
-          pagination: {
-            ...tableParams.pagination,
-            total: 200,
-          },
-        });
+    
+    let response = await getAllContentService();
+
+    if (response?.content) {
+      setDataTable(response?.content);
+      setLoading(false);
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          total: response?.content.length,
+        },
       });
+    } else {
+      setDataTable([]);
+      setLoading(false);
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          total: 0,
+        },
+      });
+    }
+  };
+
+  const onDelete = async (id) => {
+    setLoading(true);
+    let response = await deleteContentService(id);
+
+    if (response) {
+      Notification.success('Berhasil, ', 'Delete Content Berhasil');
+    } else {
+      Notification.warning('Gagal, ', 'Delete content Gagal');
+    }
+    setLoading(false);
   };
 
   // handle table
@@ -68,10 +84,30 @@ function Post(props) {
 
   // handle data modal
   const handleDataModal= (val) => {
-    setDataModal(val)
+    setDataModal({
+      ...val,
+      imageUrl: getFileIdFromDriveUrl(val.imageUrl)
+    })
   };
 
-  // fetch data on pagination change, sort change, or filter change
+  const handleDeleteConfirmation = (postId) => {
+    Swal.fire({
+      title: 'Apakah Yakin menghapus post?',
+      text: 'Apakah Anda benar-benar ingin menghapus Post ini? Tindakan ini tidak dapat dibatalkan',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yap, Hapus',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onDelete(postId);
+        Swal.fire('Terhapus!', 'Post Kamu telah di hapus.', 'success');
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire('Dibatalkan', 'Post Kamu batal di hapus.', 'info');
+      }
+    });
+  };
+
   useEffect(() => {
     fetchData();
   }, [
@@ -98,8 +134,8 @@ function Post(props) {
 
         <div className="table-responsive bg-light text-center rounded p-4">
           <Table
-            columns={coloumn_post(handleDataModal)}
-            rowKey={(record) => record.login.uuid}
+            columns={coloumn_post(handleDataModal, handleDeleteConfirmation)}
+            rowKey={(record) => record.id}
             dataSource={dataTable}
             pagination={tableParams.pagination}
             loading={loading}
@@ -134,7 +170,18 @@ function Post(props) {
                 }}
               >x</button>
               
-              <img src={dataModal?.picture?.large} className="img-fluid w-100" alt="..."/>
+              {isLoading && <div className="spinner">Loading...</div>}
+              <img 
+                src={`https://drive.google.com/thumbnail?id=${dataModal?.imageUrl}`} 
+                className="img-fluid w-100" 
+                alt="Payment Proof"
+                onLoad={() => setIsLoading(false)}
+                onError={(e) => { 
+                  e.target.onerror = null; 
+                  e.target.src = 'assets/images/default-image-payment.webp'; 
+                  setIsLoading(false);
+                }}
+              />
             </div>
           </div>
         </div>

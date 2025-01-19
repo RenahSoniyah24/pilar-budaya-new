@@ -1,5 +1,6 @@
 import {  
-  formatDate
+  formatDate,
+  formatRupiah
 } from '../../src/Formatter/Text';
 import { FaRegCheckCircle, FaEye, FaPencilAlt, FaTrash } from "react-icons/fa";
 import { FaCircleXmark } from "react-icons/fa6";
@@ -59,18 +60,18 @@ export const coloumn_pendaftar = (handleDataModal) => [
   },
   {
     title: 'Verifikasi',
-    dataIndex: 'role',
+    dataIndex: 'status',
     width: '20%',
     align: 'center',
-    render: (role) => role == 'Customer' ? <FaRegCheckCircle size={15} color="green"/> : <FaCircleXmark size={15} color="red"/>,
+    render: (status) => status == 'Pending' ? <FaCircleXmark size={15} color="red"/> : <FaRegCheckCircle size={15} color="green"/>,
     filters: [
       {
         text: 'Sukses',
-        value: 'Customer',
+        value: 'Success',
       },
       {
         text: 'Gagal',
-        value: 'male',
+        value: 'Pending',
       },
     ],
     onFilter: (value, record) => record.role === value,
@@ -85,88 +86,62 @@ export const coloumn_pendaftar = (handleDataModal) => [
   },
 ];
 
-export const coloumn_iuran = (handleDataModal) => [
+export const coloumn_iuran = [
   {
     title: 'Nama Lengkap',
-    dataIndex: 'name',
+    dataIndex: 'fullName',
     sorter: true,
-    render: (name) => `${name.first} ${name.last}`,
-    width: '20%',
+    width: '40%',
   },
   {
     title: 'Nomor Telpon',
-    dataIndex: 'phone',
+    dataIndex: 'phoneNumber',
     width: '20%',
-  },
-  {
-    title: 'Kelas',
-    dataIndex: 'gender',
-    width: '20%',
-    align: 'center',
-    render: (gender) => gender == 'female' ? <span className="badge bg-info">Success</span> : <span className="badge bg-pink">Gagal</span>,
-    filters: [
-      {
-        text: 'Dewasa',
-        value: 'female',
-      },
-      {
-        text: 'Anak',
-        value: 'male',
-      },
-    ],
-    onFilter: (value, record) => record.gender === value,
   },
   {
     title: 'Verifikasi',
-    dataIndex: 'gender',
+    dataIndex: 'status',
     width: '20%',
     align: 'center',
-    render: (gender) => gender == 'female' ? <FaRegCheckCircle size={15} color="green"/> : <FaCircleXmark size={15} color="red"/>,
+    render: (status) => status == 'Pending' ? <FaCircleXmark size={15} color="red"/> : <FaRegCheckCircle size={15} color="green"/>,
     filters: [
       {
         text: 'Sukses',
-        value: 'female',
+        value: 'Success',
       },
       {
         text: 'Gagal',
-        value: 'male',
+        value: 'Pending',
       },
     ],
-    onFilter: (value, record) => record.gender === value,
+    onFilter: (value, record) => record.role === value,
   },
   {
     title: 'Action',
     key: 'operation',
     fixed: 'right',
-    width: 100,
+    width: '20%',
     align: "center",
-    render: (text, record) => <NavLink to={`/iuran/${record.dob.age}`} className="btn btn-sm btn-info px-1 text-decoration-none" style={{paddingTop: "0.01rem", paddingBottom: "0.1rem"}}><FaEye size={15} color="white"/></NavLink>,
+    render: (text, record) => <NavLink to={`/iuran/${record.id}`} className="btn btn-sm btn-info px-1 text-decoration-none" style={{paddingTop: "0.01rem", paddingBottom: "0.1rem"}}><FaEye size={15} color="white"/></NavLink>,
   },
 ];
 
 export const coloumn_detail_iuran = (handleDataModal) => [
   {
-    title: 'Bulan',
-    dataIndex: 'name',
+    title: 'Bulan Pembayaran',
+    dataIndex: 'paymentPeriod',
     sorter: true,
-    render: (name) => `${name.first} ${name.last}`,
     width: '20%',
   },
   {
     title: 'Tanggal Bayar',
-    dataIndex: 'registered',
-    render: (registered) => `${formatDate(registered.date)}`,
+    dataIndex: 'uploadDate',
+    render: (uploadDate) => `${formatDate(uploadDate)}`,
     width: '20%',
   },
   {
     title: 'Bukti',
-    dataIndex: 'registered',
-    render: (registered) => `${formatDate(registered.date)}`,
-    width: '20%',
-  },
-  {
-    title: 'Bukti',
-    dataIndex: 'registered',
+    dataIndex: 'fileId',
     fixed: 'right',
     width: 100,
     align: "center",
@@ -174,64 +149,74 @@ export const coloumn_detail_iuran = (handleDataModal) => [
   },
   {
     title: 'Status',
-    dataIndex: 'gender',
+    dataIndex: 'paymentStatus',
     width: '20%',
     align: 'center',
-    render: (gender) => gender == 'female' ? <span className="badge bg-success">Success</span> : <span className="badge bg-danger">Gagal</span>,
+    render: (paymentStatus) => paymentStatus == 'Pending' ? <span className="badge bg-info">Pending</span> : <span className="badge bg-success">Success</span> ,
     filters: [
       {
-        text: 'Sukses',
-        value: 'female',
+        text: 'Berhasil',
+        value: 'Succes',
       },
       {
-        text: 'Gagal',
-        value: 'male',
+        text: 'Pending',
+        value: 'Pending',
       },
     ],
-    onFilter: (value, record) => record.gender === value,
+    onFilter: (value, record) => record.paymentStatus === value,
   },
-  {
-    title: 'Verifikasi',
-    dataIndex: 'gender',
-    width: '20%',
-    align: 'center',
-    render: (gender) => gender == 'female' ? <FaRegCheckCircle size={15} color="green"/> : <FaCircleXmark size={15} color="red"/>,
-    filters: [
-      {
-        text: 'Sukses',
-        value: 'female',
-      },
-      {
-        text: 'Gagal',
-        value: 'male',
-      },
-    ],
-    onFilter: (value, record) => record.gender === value,
-  },
+  // {
+  //   title: 'Verifikasi',
+  //   dataIndex: 'gender',
+  //   width: '20%',
+  //   align: 'center',
+  //   render: (gender) => gender == 'female' ? <FaRegCheckCircle size={15} color="green"/> : <FaCircleXmark size={15} color="red"/>,
+  //   filters: [
+  //     {
+  //       text: 'Sukses',
+  //       value: 'female',
+  //     },
+  //     {
+  //       text: 'Gagal',
+  //       value: 'male',
+  //     },
+  //   ],
+  //   onFilter: (value, record) => record.gender === value,
+  // },
 ];
 
-export const coloumn_post = (handleDataModal) => [
+export const coloumn_post = (handleDataModal, handleDeleteConfirmation) => [
   {
     title: 'Nama Konten',
-    dataIndex: 'name',
+    dataIndex: 'contentName',
     sorter: true,
-    render: (name) => `${name.first} ${name.last}`,
     width: '20%',
   },
   {
       title: 'Cover / Banner',
-      dataIndex: 'registered',
+      dataIndex: 'imageUrl',
       fixed: 'right',
       width: 100,
       align: "center",
-      render: (text, record) => <a href="a" data-bs-toggle="modal"  data-bs-target="#detail" onClick={() => handleDataModal(record)}>{record.name.first}</a>,
-    },
+      render: (text, record) => <a href="a" data-bs-toggle="modal"  data-bs-target="#detail" onClick={() => handleDataModal(record)}>Preview Content</a>,
+  },
   {
     title: 'Halaman',
-    dataIndex: 'name',
-    sorter: true,
-    render: (name) => `${name.first} ${name.last}`,
+    dataIndex: 'page',
     width: '20%',
+    align: 'center',
+    render: (page) => page == '1' ? <span className="badge bg-info">Profil Pelatih</span> : <span className="badge bg-info">Gallery</span> ,
+    filters: [
+      {
+        text: 'Profil Pelatih',
+        value: '1',
+      },
+      {
+        text: 'Gallery',
+        value: '2',
+      },
+    ],
+    onFilter: (value, record) => record.page === value,
   },
   {
     title: 'Action',
@@ -241,9 +226,54 @@ export const coloumn_post = (handleDataModal) => [
     align: "center",
     render: (text, record) => {
       return <>
-        <NavLink to={`/post/form/${record.dob.age}`} className="btn btn-sm btn-warning px-1 mx-1 text-decoration-none" style={{paddingTop: "0.01rem", paddingBottom: "0.1rem"}}><FaPencilAlt size={15} color="white"/></NavLink>
-        <NavLink to={`/post/form/${record.dob.age}`} className="btn btn-sm btn-danger px-1 mx-1 text-decoration-none" style={{paddingTop: "0.01rem", paddingBottom: "0.1rem"}}><FaTrash size={15} color="white"/></NavLink>
+        <button
+          onClick={() => handleDeleteConfirmation(record.id)}
+          className="btn btn-sm btn-danger px-1 mx-1 text-decoration-none"
+          style={{paddingTop: "0.01rem", paddingBottom: "0.1rem"}}
+        >
+          <FaTrash size={15} color="white"/>
+        </button>
       </>
     },
+  },
+];
+
+export const coloumn_status_pembayaran = [
+  {
+    title: 'Bulan Pembayaran',
+    dataIndex: 'paymentPeriod',
+    sorter: true,
+    width: '20%',
+  },
+  {
+    title: 'Tanggal Upload',
+    dataIndex: 'uploadDate',
+    render: (uploadDate) => `${formatDate(uploadDate)}`,
+    width: '20%',
+  },
+  {
+    title: 'Pembayaran',
+    dataIndex: 'amount',
+    render: (amount) => `${formatRupiah(amount)}`,
+    sorter: true,
+    width: '20%',
+  },
+  {
+    title: 'Status Pembayaran',
+    dataIndex: 'paymentStatus',
+    width: '20%',
+    align: 'center',
+    render: (paymentStatus) => paymentStatus == 'Pending' ? <span className="badge bg-info">Pending</span> : <span className="badge bg-success">Success</span> ,
+    filters: [
+      {
+        text: 'Berhasil',
+        value: 'Succes',
+      },
+      {
+        text: 'Pending',
+        value: 'Pending',
+      },
+    ],
+    onFilter: (value, record) => record.paymentStatus === value,
   },
 ];

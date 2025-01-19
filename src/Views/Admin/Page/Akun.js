@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FaRegUser, FaCheck } from "react-icons/fa";
 import { getUserService, getUserDetailService } from '../../../Services/ServicesAPI';
-import { formatDateToIndonesian } from '../../../Formatter/Text';
+import { formatDateToIndonesian, getLatestPayment } from '../../../Formatter/Text';
 
 import 'antd/dist/reset.css';
 import { Table } from 'antd';
-import qs from 'qs';
 import {  
   coloumn_pengguna,
   coloumn_pendaftar
@@ -71,10 +70,10 @@ function Akun(props) {
   };
 
   // handle mode
-  const handleModeChange = async (val) => {
-    setMode(val)
-    await fetchData()
-  };
+  // const handleModeChange = async (val) => {
+  //   setMode(val)
+  //   await fetchData()
+  // };
 
   // handle data modal
   const handleDataModal= async(val) => {
@@ -84,7 +83,8 @@ function Akun(props) {
     if (response) {
       let res = {
         ...val,
-        ...response.data
+        ...response.data,
+        latestPayment: getLatestPayment(response.data.payments)
       }
       setDataModal(res)
     } else {
@@ -113,8 +113,8 @@ function Akun(props) {
           </div>
           <div className="btn-toolbar mb-2 mb-md-0">
             <div className="btn-group me-2">
-              <button type="button" className={`btn btn-sm btn-outline-secondary px-1 py-0 ${mode === "Pendaftar" ? "active" : ""}`} onClick={() =>  handleModeChange("Pendaftar")}>Pengguna</button>
-              <button type="button" className={`btn btn-sm btn-outline-secondary px-1 py-0 ${mode === "Pendaftar" ? "active" : ""}`} onClick={()  =>  handleModeChange("Pendaftar")}>Pendaftar</button>
+              {/* <button type="button" className={`btn btn-sm btn-outline-secondary px-1 py-0 ${mode === "Pendaftar" ? "active" : ""}`} onClick={() =>  handleModeChange("Pendaftar")}>Pengguna</button>
+              <button type="button" className={`btn btn-sm btn-outline-secondary px-1 py-0 ${mode === "Pendaftar" ? "active" : ""}`} onClick={()  =>  handleModeChange("Pendaftar")}>Pendaftar</button> */}
             </div>
           </div>
         </div>
@@ -170,13 +170,13 @@ function Akun(props) {
                     style={{ width: "100px", height: "100px" }}
                   />
                   <h5 className="mb-1 text-center" style={{ fontWeight: "bold" }}>
-                    { formatName(dataModal?.fullname) ?? ''}
+                    { formatName(dataModal?.fullName) ?? ''}
                   </h5>
                   <p className="text-center mb-3" style={{ fontSize: "14px" }}>
                     Pendaftar
                   </p>
-                  <button className="btn btn-success btn-sm">
-                    <FaCheck size={20} className="mx-2" /> Verifikasi
+                  <button className="btn btn-success btn-sm" disabled={dataModal?.status !== 'Pending'}>
+                    <FaCheck size={20} className="mx-2" /> {dataModal?.status !== 'Pending' ? 'Terverifikasi' : 'Verifikasi'}
                   </button>
                 </div>
 
@@ -193,15 +193,26 @@ function Akun(props) {
                     <strong>Umur:</strong> <span>{dataModal?.id ?? '-'} Tahun</span>
                   </div>
                   <div>
-                    <strong>Sekolah:</strong> <span>{dataModal?.username ?? '-'}</span>
-                  </div>
-                  <div>
-                    <strong>Tanggal Daftar:</strong> <span>{formatDateToIndonesian(dataModal?.birthDate) ?? '-'}</span>
+                    <strong>Tanggal Daftar:</strong> <span>{loadingModal ? '-' : (formatDateToIndonesian(dataModal?.birthDate) ?? '-')}</span>
                   </div>
                   <h6 className="text-secondary border-bottom pt-4">Bukti Pembayaran</h6>
                   <div className="d-flex justify-content-between mt-3">
-                    {dataModal?.payment}
-                    <img src={dataModal?.payment} className="img-fluid" alt="..."/>
+                    {
+                      !loadingModal ? 
+                        <>
+                          <img 
+                            src={`https://drive.google.com/thumbnail?id=${dataModal?.latestPayment?.fileId}`} 
+                            className="img-fluid" 
+                            alt="Payment Proof"
+                            onError={(e) => { 
+                              e.target.onerror = null; 
+                              e.target.src = 'assets/images/default-image-payment.webp';
+                            }}
+                          />
+                        </>
+                        :
+                        <> Sedang Memuat</>
+                    }
                   </div>
                 </div>
               </div>

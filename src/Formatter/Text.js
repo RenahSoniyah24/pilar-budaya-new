@@ -8,6 +8,41 @@ export const formatDate = (isoString) => {
   return formatter.format(date);
 }
 
+export const calculateAge = (birthdateString) => {
+  // Parse the birthdate string into a Date object
+  const birthdate = new Date(birthdateString);
+  if (isNaN(birthdate)) {
+    throw new Error('Invalid birthdate string');
+  }
+
+  const today = new Date();
+  let age = today.getFullYear() - birthdate.getFullYear();
+
+  // Adjust for cases where the birthdate hasn't occurred yet this year
+  const isBeforeBirthday =
+    today.getMonth() < birthdate.getMonth() ||
+    (today.getMonth() === birthdate.getMonth() && today.getDate() < birthdate.getDate());
+  
+  if (isBeforeBirthday) {
+    age--;
+  }
+
+  return age;
+}
+
+export const getFileIdFromDriveUrl  = (url) => {
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
+export const formatRupiah = (amount) => {
+  if (typeof amount !== 'number') {
+    throw new Error('Input must be a number');
+  }
+  
+  return `Rp.${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+}
+
 export function formatDateToIndonesian(dateStr) {
   // Parse tanggal dari string
   const date = new Date(dateStr);
@@ -32,4 +67,15 @@ export const formatName = (name, maxLength) => {
     return '';
   }
   return name.length > maxLength ? `${name.substring(0, maxLength)}...` : name;
+};
+
+export const getLatestPayment = (payments) => {
+  if (!Array.isArray(payments) || payments.length === 0) {
+      console.error("Invalid input: payments should be a non-empty array.");
+      return null;
+  }
+
+  // Sort by uploadDate in descending order and return the first item
+  const sortedPayments = payments.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+  return sortedPayments[0] || null;
 };

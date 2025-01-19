@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { FaRegUser } from "react-icons/fa";
+import { getSecureData } from '../../../../Utils/Protect';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
+import Notification from '../../../../Components/Notification';
 import '../../../../style/css/style.css';
 
 import 'antd/dist/reset.css';
 
-import { registerService } from '../../../../Services/ServicesAPI';
+import { uploadBuktiService } from '../../../../Services/ServicesAPI';
 
 const dropzoneStyle = {
   border: '2px dashed #ccc',
@@ -34,9 +36,9 @@ const previewStyle = {
 
 function Upload(props) {
   const [namaKonten, setNamaKonten] = useState('');
-  const [halaman, setHalaman] = useState('');
-  const [keterangan, setKeterangan] = useState('');
+  const [periode, setPeriode] = useState('');
   const [files, setFiles] = useState([]);
+  const [userData, setUserData] = useState({});
   const history = useHistory();
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -55,24 +57,34 @@ function Upload(props) {
   });
 
   useEffect(() => {
-    // Cleanup preview URLs when component unmounts
-    return () => {
+    HandlingGetUserData();
+    if (Array.isArray(files)) {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
-    };
+    }
   }, [files]);
+
+  const HandlingGetUserData = () => {
+    const data = getSecureData();
+    if (data) setUserData(data);
+    else setUserData({})
+  }
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const response = await registerService(namaKonten, halaman);
+      const response = await uploadBuktiService(userData.id, periode, files);
       if (response.data) {
-        Notification.success('Daftar Berhasil, ', 'Silahkan Login');
-        history.push('/login');
+        Notification.success('Berhasil, ', 'Upload Bukti Berhasil');
+        setPeriode('')
+        setFiles('')
       } else {
         throw new Error('Failed to login');
       }
     } catch (err) {
       console.error('Error:', err.message || err);
+      Notification.success('Gagal, ', 'Upload Bukti Gagal');
+      setPeriode('')
+      setFiles('')
       Notification.warning('Upps, ', err.message);
     }
   };
@@ -81,25 +93,26 @@ function Upload(props) {
     <>
       <form onSubmit={submitHandler} className="signin-form">
         <div className="form-group mb-3">
-          <label className="label">Halaman</label>
+          <label className="label">Periode</label>
           <select
             className="form-select"
-            value={halaman}
-            onChange={(e) => setHalaman(e.target.value)}
+            value={periode}
+            onChange={(e) => setPeriode(e.target.value)}
             required
           >
-            <option value="1">Januari</option>
-            <option value="2">Februari</option>
-            <option value="3">Maret</option>
-            <option value="4">April</option>
-            <option value="5">Mei</option>
-            <option value="6">Juni</option>
-            <option value="7">Juli</option>
-            <option value="8">Agustus</option>
-            <option value="9">September</option>
-            <option value="10">Oktober</option>
-            <option value="11">November</option>
-            <option value="12">Desember</option>
+            <option value="" defaultValue></option>
+            <option value="Januari">Januari</option>
+            <option value="Februari">Februari</option>
+            <option value="Maret">Maret</option>
+            <option value="April">April</option>
+            <option value="Mei">Mei</option>
+            <option value="Juni">Juni</option>
+            <option value="Juli">Juli</option>
+            <option value="Agustus">Agustus</option>
+            <option value="September">September</option>
+            <option value=">Oktober">Oktober</option>
+            <option value=">November">November</option>
+            <option value=">Desember">Desember</option>
           </select>
         </div>
         <div className="form-group mb-3">

@@ -114,3 +114,37 @@ html, body {
 .img-hero {
   width: 100%;
 }
+
+// Skeleton loading styles
+.skeleton {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+// Keyframes untuk efek shimmer
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Skeleton untuk gambar
+.skeleton-image {
+  width: 300px; // Sesuaikan dengan ukuran gambar asli
+  height: 400px;
+  object-fit: cover; // Agar gambar tidak terdistorsi
+  border-radius: 8px; // Sesuaikan dengan sudut kartu gambar
+}
+
+// Skeleton untuk teks
+.skeleton-text {
+  width: 200px; // Sesuaikan dengan panjang teks
+  height: 20px;
+  margin-top: 8px; // Memberi jarak antara gambar dan teks
+  border-radius: 4px; // Sudut sedikit melengkung
+}

@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { FaRegUser, FaCheck } from "react-icons/fa";
+import { getSecureData } from '../../../../Utils/Protect';
 
 import 'antd/dist/reset.css';
 import { Table } from 'antd';
 import qs from 'qs';
 import {  
-  coloumn_pengguna,
-  coloumn_pendaftar
+  coloumn_status_pembayaran,
 } from '../../../../Constant/DataColoumn';
 import {  
   formatName
 } from '../../../../Formatter/Text';
+import { getUserDetailService } from '../../../../Services/ServicesAPI';
 
 function StatusPembayaran(props) {
-  const [mode, setMode]               = useState('Pengguna');
   const [dataTable, setDataTable]     = useState([]);
   const [loading, setLoading]         = useState(false);
   const [dataModal, setDataModal]     = useState({});
@@ -24,31 +24,48 @@ function StatusPembayaran(props) {
     },
   });
 
-  // ---- dummy request for data
-  const getRandomuserParams = (params) => ({
-    results: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    ...params,
-  });
-  // -----
+  const HandlingGetUserData = async () => {
+    const data = getSecureData();
+    return data;
+  }
+
+  const getDetailUser= async(id) => {
+    setLoading(true)
+
+    let response = await getUserDetailService(id);
+
+    if (response?.data?.payments) {
+      setDataTable(response.data.payments);
+      setTableParams({
+        ...tableParams,
+        pagination: {
+          ...tableParams.pagination,
+          total: response.data.payments.length,
+        },
+      });
+    } else {
+      setDataTable([]);
+    }
+    setLoading(false)
+  };
 
   // fetch server side
-  const fetchData = () => {
-    setLoading(true);
-    fetch(`https://randomuser.me/api?${qs.stringify(getRandomuserParams(tableParams))}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        setDataTable(results);
-        setLoading(false);
-        setTableParams({
-          ...tableParams,
-          pagination: {
-            ...tableParams.pagination,
-            total: 200,
-          },
-        });
-      });
-  };
+  // const fetchData = () => {
+  //   setLoading(true);
+  //   fetch(`https://randomuser.me/api?${qs.stringify(getRandomuserParams(tableParams))}`)
+  //     .then((res) => res.json())
+  //     .then(({ results }) => {
+  //       setDataTable(results);
+  //       setLoading(false);
+  //       setTableParams({
+  //         ...tableParams,
+  //         pagination: {
+  //           ...tableParams.pagination,
+  //           total: 200,
+  //         },
+  //       });
+  //     });
+  // };
 
   // handle table
   const handleTableChange = (pagination, filters, sorter) => {
@@ -64,20 +81,17 @@ function StatusPembayaran(props) {
     }
   };
 
-  // handle mode
-  const handleModeChange = (val) => {
-    setMode(val)
-    fetchData()
-  };
-
   // handle data modal
   const handleDataModal= (val) => {
     setDataModal(val)
   };
 
   // fetch data on pagination change, sort change, or filter change
-  useEffect(() => {
-    fetchData();
+  useEffect(async () => {
+    const data = await HandlingGetUserData();
+    if (data?.id) {
+      await getDetailUser(data?.id);
+    }
   }, [
     tableParams.pagination?.current,
     tableParams.pagination?.pageSize,
@@ -90,8 +104,8 @@ function StatusPembayaran(props) {
     <>
         <div className="table-responsive bg-light text-center rounded p-4">
           <Table
-            columns={mode === "Pengguna" ? coloumn_pengguna : coloumn_pendaftar(handleDataModal)}
-            rowKey={(record) => record.login.uuid}
+            columns={coloumn_status_pembayaran}
+            rowKey={(record) => record.id}
             dataSource={dataTable}
             pagination={tableParams.pagination}
             loading={loading}

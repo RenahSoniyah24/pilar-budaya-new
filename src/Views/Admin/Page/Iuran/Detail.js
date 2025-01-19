@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaWallet, FaCheck } from "react-icons/fa";
+import { getUserDetailService } from '../../../../Services/ServicesAPI';
+import { useParams } from 'react-router-dom';
 
 import 'antd/dist/reset.css';
 import { Table } from 'antd';
@@ -7,12 +9,19 @@ import qs from 'qs';
 import {  
   coloumn_detail_iuran,
 } from '../../../../Constant/DataColoumn';
+import {  
+  formatDate,
+  calculateAge
+} from '../../../../../src/Formatter/Text';
 
 import Admin from '../../Index';
 
 function IuranDetail(props) {
+  const {identifier}                  = useParams()
+  const [data, setData]               = useState({});
   const [dataTable, setDataTable]     = useState([]);
   const [loading, setLoading]         = useState(false);
+  const [isLoading, setIsLoading]     = useState(true);
   const [dataModal, setDataModal]     = useState({});
   const [tableParams, setTableParams] = useState({
     pagination: {
@@ -21,31 +30,41 @@ function IuranDetail(props) {
     },
   });
 
-  // ---- dummy request for data
-  const getRandomuserParams = (params) => ({
-    results: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    ...params,
-  });
-  // -----
-
   // fetch server side
-  const fetchData = () => {
+  const fetchData = async () => {
     setLoading(true);
-    fetch(`https://randomuser.me/api?${qs.stringify(getRandomuserParams(tableParams))}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        debugger
-        setDataTable(results);
-        setLoading(false);
-        setTableParams({
-          ...tableParams,
-          pagination: {
-            ...tableParams.pagination,
-            total: 200,
-          },
-        });
+
+    let response = await getUserDetailService(identifier);
+
+    if (response) {
+      let data = response.data
+      let formatBirth = formatDate(data.birthDate)
+      let age = calculateAge(data.birthDate)
+
+      setData({
+        ...data,
+        birthDate: formatBirth,
+        age: `${age} Tahun`
       });
+      setDataTable(response.data.payments);
+      setLoading(false);
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          total: response.data.payments.length,
+        },
+      });
+    } else {
+      setData({});
+      setDataTable([]);
+      setLoading(false);
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          total: 0,
+        },
+      });
+    }
   };
 
   // handle table
@@ -88,22 +107,19 @@ function IuranDetail(props) {
         </div>
 
         <div className="row">
-          <div className="col-md-3 col-sm-12">
-            <img src={dataModal?.picture?.large} className="img-fluid" alt="..."/>
+          <div className="col-md-3 col-sm-12 px-2 py-2 w-10">
+            <img src={`${process.env.PUBLIC_URL}/assets/icon/user.webp`} className="img-fluid" alt="..."/>
           </div>
           <div className="col-md-9 col-sm-12">
             <div className="flex-grow-1 p-4">
               <div>
-                <strong>Tanggal Lahir:</strong> <span>{dataModal?.name?.first ?? ''}</span>
+                <strong>Nama Lengkap:</strong> <span>{data?.fullName ?? ''}</span>
               </div>
               <div>
-                <strong>Umur:</strong> <span>{dataModal?.name?.first ?? ''} Tahun</span>
+                <strong>Tanggal Lahir:</strong> <span>{data?.birthDate ?? ''}</span>
               </div>
               <div>
-                <strong>Sekolah:</strong> <span>{dataModal?.name?.first ?? ''}</span>
-              </div>
-              <div>
-                <strong>Tanggal Daftar:</strong> <span>{dataModal?.name?.first ?? ''}</span>
+                <strong>Umur:</strong> <span>{data?.age ?? ''}</span>
               </div>
             </div>
           </div>
@@ -112,7 +128,7 @@ function IuranDetail(props) {
         <div className="table-responsive">
           <Table
             columns={coloumn_detail_iuran(handleDataModal)}
-            rowKey={(record) => record.login.uuid}
+            rowKey={(record) => record.id}
             dataSource={dataTable}
             pagination={tableParams.pagination}
             loading={loading}
@@ -147,7 +163,18 @@ function IuranDetail(props) {
                 }}
               >x</button>
               
-              <img src={dataModal?.picture?.large} className="img-fluid w-100" alt="..."/>
+              {isLoading && <div className="spinner">Loading...</div>}
+              <img 
+                src={`https://drive.google.com/thumbnail?id=${dataModal?.fileId}`} 
+                className="img-fluid w-100" 
+                alt="Payment Proof"
+                onLoad={() => setIsLoading(false)}
+                onError={(e) => { 
+                  e.target.onerror = null; 
+                  e.target.src = 'assets/images/default-image-payment.webp'; 
+                  setIsLoading(false);
+                }}
+              />
             </div>
           </div>
         </div>

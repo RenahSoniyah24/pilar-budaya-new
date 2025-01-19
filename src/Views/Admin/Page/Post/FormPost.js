@@ -3,11 +3,12 @@ import { FaRegUser } from "react-icons/fa";
 import { useParams, useHistory } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import '../../../../style/css/style.css';
+import Notification from '../../../../Components/Notification';
+import { uploadContentService } from '../../../../Services/ServicesAPI';
 
 import 'antd/dist/reset.css';
 
 import Admin from '../../Index';
-import { registerService } from '../../../../Services/ServicesAPI';
 
 const dropzoneStyle = {
   border: '2px dashed #ccc',
@@ -57,24 +58,30 @@ function FormPost(props) {
   });
 
   useEffect(() => {
-    // Cleanup preview URLs when component unmounts
-    return () => {
+    if (Array.isArray(files)) {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
-    };
+    }
   }, [files]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const response = await registerService(namaKonten, halaman);
+      const response = await uploadContentService(namaKonten, halaman, keterangan, files);
       if (response.data) {
-        Notification.success('Daftar Berhasil, ', 'Silahkan Login');
-        history.push('/login');
+        Notification.success('Berhasil, ', 'Upload Content Berhasil');
+        setNamaKonten('')
+        setHalaman('')
+        setKeterangan('')
+        setFiles('')
       } else {
         throw new Error('Failed to login');
       }
     } catch (err) {
       console.error('Error:', err.message || err);
+      setNamaKonten('')
+      setHalaman('')
+      setKeterangan('')
+      setFiles('')
       Notification.warning('Upps, ', err.message);
     }
   };
@@ -109,6 +116,7 @@ function FormPost(props) {
             onChange={(e) => setHalaman(e.target.value)}
             required
           >
+            <option value="" defaultValue></option>
             <option value="1">Profil</option>
             <option value="2">Gallery</option>
           </select>

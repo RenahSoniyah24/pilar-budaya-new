@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaWallet, FaCheck } from "react-icons/fa";
+import { getUserService } from '../../../../Services/ServicesAPI';
 
 import 'antd/dist/reset.css';
 import { Table } from 'antd';
@@ -24,30 +25,31 @@ function Detail(props) {
     },
   });
 
-  // ---- dummy request for data
-  const getRandomuserParams = (params) => ({
-    results: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    ...params,
-  });
-  // -----
-
   // fetch server side
-  const fetchData = () => {
+  const fetchData = async () => {
     setLoading(true);
-    fetch(`https://randomuser.me/api?${qs.stringify(getRandomuserParams(tableParams))}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        setDataTable(results);
-        setLoading(false);
-        setTableParams({
-          ...tableParams,
-          pagination: {
-            ...tableParams.pagination,
-            total: 200,
-          },
-        });
+    
+    let response = await getUserService(tableParams.pagination.current, tableParams.pagination.pageSize);
+
+    if (response) {
+      setDataTable(response.data);
+      setLoading(false);
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          total: response.total,
+        },
       });
+    } else {
+      setDataTable([]);
+      setLoading(false);
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          total: 0,
+        },
+      });
+    }
   };
 
   // handle table
@@ -64,14 +66,9 @@ function Detail(props) {
     }
   };
 
-  // handle data modal
-  const handleDataModal= (val) => {
-    setDataModal(val)
-  };
-
   // fetch data on pagination change, sort change, or filter change
-  useEffect(() => {
-    fetchData();
+  useEffect(async() => {
+    await fetchData();
   }, [
     tableParams.pagination?.current,
     tableParams.pagination?.pageSize,
@@ -91,8 +88,8 @@ function Detail(props) {
 
         <div className="table-responsive bg-light text-center rounded p-4">
           <Table
-            columns={coloumn_iuran(handleDataModal)}
-            rowKey={(record) => record.login.uuid}
+            columns={coloumn_iuran}
+            rowKey={(record) => record.id}
             dataSource={dataTable}
             pagination={tableParams.pagination}
             loading={loading}
