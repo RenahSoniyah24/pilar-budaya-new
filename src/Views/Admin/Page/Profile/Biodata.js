@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { getSecureData } from '../../../../Utils/Protect';
+import { formatDateToIndonesian } from '../../../../Formatter/Text';
 
 import 'antd/dist/reset.css';
 
 
 function Profile(props) {
+  const [userData, setUserData] = useState({});
+
+  const HandlingGetUserData = () => {
+    const data = getSecureData();
+    if (data) setUserData(data);
+    else setUserData({})
+  }
 
   // fetch data on pagination change, sort change, or filter change
   useEffect(() => {
+    HandlingGetUserData();
   }, [
   ]);
 
@@ -23,32 +33,32 @@ function Profile(props) {
             <div className="row mb-3">
               <div className="col-md-2"></div>
               <div className="col-md-4 text-start fw-bold">Tanggal Lahir</div>
-              <div className="col-md-6">27 Juni 2003</div>
+              <div className="col-md-6">{formatDateToIndonesian(userData?.birthDate) ?? ''}</div>
             </div>
             <div className="row mb-3">
               <div className="col-md-2"></div>
               <div className="col-md-4 text-start fw-bold">Jenis Kelamin</div>
-              <div className="col-md-6">Perempuan</div>
+              <div className="col-md-6">{userData?.username ?? ''}</div>
             </div>
             <div className="row mb-3">
               <div className="col-md-2"></div>
               <div className="col-md-4 text-start fw-bold">Email</div>
-              <div className="col-md-6">aridaazkiah@gmail.com</div>
+              <div className="col-md-6">{userData?.username ?? ''}</div>
             </div>
             <div className="row mb-3">
               <div className="col-md-2"></div>
               <div className="col-md-4 text-start fw-bold">Nomor HP</div>
-              <div className="col-md-6">0875472972202</div>
+              <div className="col-md-6">{userData?.phoneNumber ?? ''}</div>
             </div>
             <div className="row mb-3">
               <div className="col-md-2"></div>
               <div className="col-md-4 text-start fw-bold">Kelas</div>
-              <div className="col-md-6">3</div>
+              <div className="col-md-6">{userData?.id ?? ''}</div>
             </div>
             <div className="row mb-3">
               <div className="col-md-2"></div>
               <div className="col-md-4 text-start fw-bold">Sekolah</div>
-              <div className="col-md-6">UI</div>
+              <div className="col-md-6">{userData?.username ?? ''}</div>
             </div>
           </div>
         </div>
