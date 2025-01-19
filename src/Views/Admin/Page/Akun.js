@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaRegUser, FaCheck } from "react-icons/fa";
+import { getUserService, getUserDetailService } from '../../../Services/ServicesAPI';
+import { formatDateToIndonesian } from '../../../Formatter/Text';
 
 import 'antd/dist/reset.css';
 import { Table } from 'antd';
@@ -15,9 +17,10 @@ import {
 import Admin from '../Index';
 
 function Akun(props) {
-  const [mode, setMode]               = useState('Pengguna');
+  const [mode, setMode]               = useState('Pendaftar');
   const [dataTable, setDataTable]     = useState([]);
   const [loading, setLoading]         = useState(false);
+  const [loadingModal, setLoadingModal] = useState(false);
   const [dataModal, setDataModal]     = useState({});
   const [tableParams, setTableParams] = useState({
     pagination: {
@@ -26,30 +29,31 @@ function Akun(props) {
     },
   });
 
-  // ---- dummy request for data
-  const getRandomuserParams = (params) => ({
-    results: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    ...params,
-  });
-  // -----
-
   // fetch server side
-  const fetchData = () => {
+  const fetchData = async () => {
     setLoading(true);
-    fetch(`https://randomuser.me/api?${qs.stringify(getRandomuserParams(tableParams))}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        setDataTable(results);
-        setLoading(false);
-        setTableParams({
-          ...tableParams,
-          pagination: {
-            ...tableParams.pagination,
-            total: 200,
-          },
-        });
+    
+    let response = await getUserService(tableParams.pagination.current, tableParams.pagination.pageSize);
+
+    if (response) {
+      setDataTable(response.data);
+      setLoading(false);
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          total: response.total,
+        },
       });
+    } else {
+      setDataTable([]);
+      setLoading(false);
+      setTableParams({
+        pagination: {
+          ...tableParams.pagination,
+          total: 0,
+        },
+      });
+    }
   };
 
   // handle table
@@ -67,19 +71,31 @@ function Akun(props) {
   };
 
   // handle mode
-  const handleModeChange = (val) => {
+  const handleModeChange = async (val) => {
     setMode(val)
-    fetchData()
+    await fetchData()
   };
 
   // handle data modal
-  const handleDataModal= (val) => {
-    setDataModal(val)
+  const handleDataModal= async(val) => {
+    setLoadingModal(true)
+    let response = await getUserDetailService(val.id);
+
+    if (response) {
+      let res = {
+        ...val,
+        ...response.data
+      }
+      setDataModal(res)
+    } else {
+      setDataModal({})
+    }
+    setLoadingModal(false)
   };
 
   // fetch data on pagination change, sort change, or filter change
-  useEffect(() => {
-    fetchData();
+  useEffect(async() => {
+    await fetchData();
   }, [
     tableParams.pagination?.current,
     tableParams.pagination?.pageSize,
@@ -97,7 +113,7 @@ function Akun(props) {
           </div>
           <div className="btn-toolbar mb-2 mb-md-0">
             <div className="btn-group me-2">
-              <button type="button" className={`btn btn-sm btn-outline-secondary px-1 py-0 ${mode === "Pengguna" ? "active" : ""}`} onClick={() =>  handleModeChange("Pengguna")}>Pengguna</button>
+              <button type="button" className={`btn btn-sm btn-outline-secondary px-1 py-0 ${mode === "Pendaftar" ? "active" : ""}`} onClick={() =>  handleModeChange("Pendaftar")}>Pengguna</button>
               <button type="button" className={`btn btn-sm btn-outline-secondary px-1 py-0 ${mode === "Pendaftar" ? "active" : ""}`} onClick={()  =>  handleModeChange("Pendaftar")}>Pendaftar</button>
             </div>
           </div>
@@ -106,7 +122,7 @@ function Akun(props) {
         <div className="table-responsive bg-light text-center rounded p-4">
           <Table
             columns={mode === "Pengguna" ? coloumn_pengguna : coloumn_pendaftar(handleDataModal)}
-            rowKey={(record) => record.login.uuid}
+            rowKey={(record) => record.id}
             dataSource={dataTable}
             pagination={tableParams.pagination}
             loading={loading}
@@ -154,7 +170,7 @@ function Akun(props) {
                     style={{ width: "100px", height: "100px" }}
                   />
                   <h5 className="mb-1 text-center" style={{ fontWeight: "bold" }}>
-                    { formatName(dataModal?.name?.first) ?? ''}
+                    { formatName(dataModal?.fullname) ?? ''}
                   </h5>
                   <p className="text-center mb-3" style={{ fontSize: "14px" }}>
                     Pendaftar
@@ -168,20 +184,24 @@ function Akun(props) {
                 <div className="flex-grow-1 p-4">
                   <h6 className="text-secondary border-bottom pb-2">Information</h6>
                   <div>
-                    <strong>Tanggal Lahir:</strong> <span>{dataModal?.name?.first ?? ''}</span>
+                    <strong>Tanggal Lahir:</strong> <span>{loadingModal ? '-' : (formatDateToIndonesian(dataModal?.birthDate) ?? '-')}</span>
                   </div>
                   <div>
-                    <strong>Umur:</strong> <span>{dataModal?.name?.first ?? ''} Tahun</span>
+                    <strong>Email:</strong> <span>{dataModal?.email ?? '-'}</span>
                   </div>
                   <div>
-                    <strong>Sekolah:</strong> <span>{dataModal?.name?.first ?? ''}</span>
+                    <strong>Umur:</strong> <span>{dataModal?.id ?? '-'} Tahun</span>
                   </div>
                   <div>
-                    <strong>Tanggal Daftar:</strong> <span>{dataModal?.name?.first ?? ''}</span>
+                    <strong>Sekolah:</strong> <span>{dataModal?.username ?? '-'}</span>
+                  </div>
+                  <div>
+                    <strong>Tanggal Daftar:</strong> <span>{formatDateToIndonesian(dataModal?.birthDate) ?? '-'}</span>
                   </div>
                   <h6 className="text-secondary border-bottom pt-4">Bukti Pembayaran</h6>
                   <div className="d-flex justify-content-between mt-3">
-                    <img src={dataModal?.picture?.medium} className="img-fluid" alt="..."/>
+                    {dataModal?.payment}
+                    <img src={dataModal?.payment} className="img-fluid" alt="..."/>
                   </div>
                 </div>
               </div>

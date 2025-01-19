@@ -42,39 +42,38 @@ export const coloumn_pengguna = [
 export const coloumn_pendaftar = (handleDataModal) => [
   {
     title: 'Nama Lengkap',
-    dataIndex: 'name',
+    dataIndex: 'fullName',
     sorter: true,
-    render: (name) => `${name.first} ${name.last}`,
     width: '20%',
   },
   {
     title: 'Nomor Telpon',
-    dataIndex: 'phone',
+    dataIndex: 'phoneNumber',
     width: '20%',
   },
   {
     title: 'Tanggal Daftar',
-    dataIndex: 'registered',
-    render: (registered) => `${formatDate(registered.date)}`,
+    dataIndex: 'birthDate',
+    render: (birthDate) => `${formatDate(birthDate)}`,
     width: '20%',
   },
   {
     title: 'Verifikasi',
-    dataIndex: 'gender',
+    dataIndex: 'role',
     width: '20%',
     align: 'center',
-    render: (gender) => gender == 'female' ? <FaRegCheckCircle size={15} color="green"/> : <FaCircleXmark size={15} color="red"/>,
+    render: (role) => role == 'Customer' ? <FaRegCheckCircle size={15} color="green"/> : <FaCircleXmark size={15} color="red"/>,
     filters: [
       {
         text: 'Sukses',
-        value: 'female',
+        value: 'Customer',
       },
       {
         text: 'Gagal',
         value: 'male',
       },
     ],
-    onFilter: (value, record) => record.gender === value,
+    onFilter: (value, record) => record.role === value,
   },
   {
     title: 'Action',

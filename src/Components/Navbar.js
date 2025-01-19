@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import User from '../Store';
-import { removeSecureData, getSecureData } from '../Utils/Protect';
+import { removeSecureData, getSecureData, checkTokenValidity } from '../Utils/Protect';
 
 function Navbar({ children , props}) {
   const {email}           = useRecoilValue(User)
@@ -78,7 +78,7 @@ function Navbar({ children , props}) {
             <div className="d-flex">
 
               {
-                user.status === 'true'?
+                checkTokenValidity ?
                   <>
                     {/* <div className='my-3 d-flex align-items-center'>{email}</div>
                     <NavLink className='btn btn-outline-warning btn-sm my-4 mx-2 px-4' to="/dashboard" exact>Dashboard</NavLink>
