@@ -29,6 +29,25 @@ html, body {
   }
 }
 
+.card-gallery {
+  display: flex;
+  justify-content: center;  // Meratakan secara horizontal
+  align-items: center;      // Meratakan secara vertikal
+  height: 100%;             // Pastikan kontainer mengambil seluruh tinggi
+}
+
+.skeleton-wrapper {
+  display: flex;
+  flex-direction: column;   // Susun elemen secara vertikal
+  justify-content: center;  // Menjaga elemen di tengah secara vertikal
+  align-items: center;      // Meratakan elemen di tengah secara horizontal
+}
+
+.skeleton {
+  margin: 10px 0;  // Memberikan jarak antar elemen skeleton
+}
+
+
 // Content Section
 .content-section {
   height: 50%;

@@ -3,6 +3,7 @@ import Navbar from '../../../Components/Navbar';
 import Footer from '../../../Components/Footer';
 import Card from './GalleryCard';
 import '../../../style/style.scss';
+import '../../../style/cardModule.scss';
 import { getPelatihService } from '../../../Services/ServicesAPI';
 
 function Gallery(props) {
@@ -39,86 +40,54 @@ const [dancers, setDancers]   = useState([]);
             {loading ? 
               (
                 <>
-                  <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
-                    <div
-                      className="px-0 py-0 card-gallery justify-content-center"
-                    >
-                      <div>
-                        <div className="skeleton skeleton-image"></div>
-                        <div className="skeleton skeleton-text"></div>
-                      </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div className="px-0 py-0 card-gallery justify-content-center">
+                    <div className="skeleton-wrapper">
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
                     </div>
                   </div>
-                  <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
-                    <div
-                      className="px-0 py-0 card-gallery justify-content-center"
-                    >
-                      <div>
-                        <div className="skeleton skeleton-image"></div>
-                        <div className="skeleton skeleton-text"></div>
-                      </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div className="px-0 py-0 card-gallery justify-content-center">
+                    <div className="skeleton-wrapper">
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
                     </div>
                   </div>
-                  <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
-                    <div
-                      className="px-0 py-0 card-gallery justify-content-center"
-                    >
-                      <div>
-                        <div className="skeleton skeleton-image"></div>
-                        <div className="skeleton skeleton-text"></div>
-                      </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div className="px-0 py-0 card-gallery justify-content-center">
+                    <div className="skeleton-wrapper">
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
                     </div>
                   </div>
-                  <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
-                    <div
-                      className="px-0 py-0 card-gallery justify-content-center"
-                    >
-                      <div>
-                        <div className="skeleton skeleton-image"></div>
-                        <div className="skeleton skeleton-text"></div>
-                      </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div className="px-0 py-0 card-gallery justify-content-center">
+                    <div className="skeleton-wrapper">
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
                     </div>
                   </div>
-                  <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
-                    <div
-                      className="px-0 py-0 card-gallery justify-content-center"
-                    >
-                      <div>
-                        <div className="skeleton skeleton-image"></div>
-                        <div className="skeleton skeleton-text"></div>
-                      </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div className="px-0 py-0 card-gallery justify-content-center">
+                    <div className="skeleton-wrapper">
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
                     </div>
                   </div>
-                  <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
-                    <div
-                      className="px-0 py-0 card-gallery justify-content-center"
-                    >
-                      <div>
-                        <div className="skeleton skeleton-image"></div>
-                        <div className="skeleton skeleton-text"></div>
-                      </div>
+                </div>
+                <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
+                  <div className="px-0 py-0 card-gallery justify-content-center">
+                    <div className="skeleton-wrapper">
+                      <div className="skeleton skeleton-image"></div>
+                      <div className="skeleton skeleton-text"></div>
                     </div>
                   </div>
-                  <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
-                    <div
-                      className="px-0 py-0 card-gallery justify-content-center"
-                    >
-                      <div>
-                        <div className="skeleton skeleton-image"></div>
-                        <div className="skeleton skeleton-text"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-container col-md-4 col-sm-12 mx-1 my-1">
-                    <div
-                      className="px-0 py-0 card-gallery justify-content-center"
-                    >
-                      <div>
-                        <div className="skeleton skeleton-image"></div>
-                        <div className="skeleton skeleton-text"></div>
-                      </div>
-                    </div>
-                  </div>
+                </div>
                 </>
               ) :
                 dancers.map((dancer, index) => (

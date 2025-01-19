@@ -58,26 +58,28 @@ function GalleryCard({ image, name }) {
         className="card-container col-md-4 col-sm-12 mx-1 my-1"
       >
         <div className="px-0 py-0 card-gallery justify-content-center" ref={cardRef}>
-          <img 
-            onMouseMove={handleMouseMove} 
-            onMouseLeave={handleMouseLeave} 
-            style={{
-              width: '300px', // Lebar gambar
-              height: '400px', // Tinggi gambar
-              objectFit: 'cover', // Menjaga agar gambar tidak terdistorsi
-              borderRadius: '8px', // Opsi sudut bulat
-            }}
-            src={imageParse ? `https://drive.google.com/thumbnail?id=${imageParse}` : 'assets/images/default-image-payment.webp'} 
-            alt={name} 
-            onLoad={() => setIsLoading(false)}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = 'assets/images/default-image-payment.webp';
-              setIsLoading(false);
-            }}
-            />
           <div>
-            {name}
+            <img 
+              onMouseMove={handleMouseMove} 
+              onMouseLeave={handleMouseLeave} 
+              style={{
+                width: '300px', // Lebar gambar
+                height: '400px', // Tinggi gambar
+                objectFit: 'cover', // Menjaga agar gambar tidak terdistorsi
+                borderRadius: '8px', // Opsi sudut bulat
+              }}
+              src={imageParse ? `https://drive.google.com/thumbnail?id=${imageParse}` : 'assets/images/default-image-payment.webp'} 
+              alt={name} 
+              onLoad={() => setIsLoading(false)}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'assets/images/default-image-payment.webp';
+                setIsLoading(false);
+              }}
+              />
+            <div>
+              {name}
+            </div>
           </div>
         </div>
       </div>
