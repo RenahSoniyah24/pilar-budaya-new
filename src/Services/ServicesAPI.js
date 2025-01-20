@@ -14,6 +14,7 @@ const api = axios.create({
 });
 
 export const loginService = async (email, password) => {
+  debugger
   try {
     const req = { email, password };
     console.debug('[REQUEST LOGIN]', req)
@@ -215,7 +216,7 @@ export const getPelatihService = async () => {
 
 export const verifikasiService = async (id) => {
   try {
-    const req = { };
+    const req = { paymentStatus: 'Success' };
     console.debug('[REQUEST verifikasiService]', req)
 
     const response = await api.put(`${endpoints.verifikasi}${id}`, req);

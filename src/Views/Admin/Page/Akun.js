@@ -95,11 +95,23 @@ function Akun(props) {
   };
 
   const handleVerifikasi= async(val) => {
+    debugger
     setLoadingModal(true)
-    let response = await verifikasiService(val.id);
+    let response = await verifikasiService(val);
 
     if (response) {
       Notification.success('Berhasil, ', 'Verifikasi Pembayaran Berhasil');
+      const modalElement = document.getElementById("detail");
+      modalElement.classList.remove("show");
+      modalElement.style.display = "none";
+      modalElement.setAttribute("aria-hidden", "true");
+
+      const backdrop = document.querySelector(".modal-backdrop");
+      if (backdrop) {
+        backdrop.remove();
+      }
+
+      await fetchData();
     } else {
       Notification.warning('Upps, ', 'Verifikasi Pembayaran Gagal');
     }
@@ -188,8 +200,8 @@ function Akun(props) {
                   <p className="text-center mb-3" style={{ fontSize: "14px" }}>
                     Pendaftar
                   </p>
-                  <button className="btn btn-success btn-sm" disabled={dataModal?.status !== 'Pending'} onClick={() =>  handleVerifikasi(dataModal?.id)}>
-                    <FaCheck size={20} className="mx-2" /> {dataModal?.status !== 'Pending' ? 'Terverifikasi' : 'Verifikasi'}
+                  <button className="btn btn-success btn-sm" disabled={dataModal?.isActive} onClick={() =>  handleVerifikasi(dataModal?.id)}>
+                    <FaCheck size={20} className="mx-2" /> {dataModal?.isActive ? 'Terverifikasi' : 'Verifikasi'}
                   </button>
                 </div>
 

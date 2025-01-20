@@ -60,21 +60,21 @@ export const coloumn_pendaftar = (handleDataModal) => [
   },
   {
     title: 'Verifikasi',
-    dataIndex: 'status',
+    dataIndex: 'isActive',
     width: '20%',
     align: 'center',
-    render: (status) => status == 'Pending' ? <FaCircleXmark size={15} color="red"/> : <FaRegCheckCircle size={15} color="green"/>,
+    render: (isActive) => isActive ? <FaRegCheckCircle size={15} color="green"/> : <FaCircleXmark size={15} color="red"/>,
     filters: [
       {
-        text: 'Sukses',
-        value: 'Success',
+        text: 'Terverifikasi',
+        value: true,
       },
       {
-        text: 'Gagal',
-        value: 'Pending',
+        text: 'Belum Verifikasi',
+        value: false,
       },
     ],
-    onFilter: (value, record) => record.role === value,
+    onFilter: (value, record) => record.isActive === value,
   },
   {
     title: 'Action',
@@ -100,21 +100,21 @@ export const coloumn_iuran = [
   },
   {
     title: 'Verifikasi',
-    dataIndex: 'status',
+    dataIndex: 'isActive',
     width: '20%',
     align: 'center',
-    render: (status) => status == 'Pending' ? <FaCircleXmark size={15} color="red"/> : <FaRegCheckCircle size={15} color="green"/>,
+    render: (isActive) => isActive ? <FaRegCheckCircle size={15} color="green"/> : <FaCircleXmark size={15} color="red"/>,
     filters: [
       {
-        text: 'Sukses',
-        value: 'Success',
+        text: 'Terverifikasi',
+        value: true,
       },
       {
-        text: 'Gagal',
-        value: 'Pending',
+        text: 'Belum Verifikasi',
+        value: false,
       },
     ],
-    onFilter: (value, record) => record.role === value,
+    onFilter: (value, record) => record.isActive === value,
   },
   {
     title: 'Action',
