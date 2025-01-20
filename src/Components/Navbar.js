@@ -9,6 +9,7 @@ function Navbar({ children , props}) {
   const {email}           = useRecoilValue(User)
   const [user, setUser]   = useRecoilState(User)
   const [userData, setUserData] = useState({});
+  const [validity, setValidity] = useState({});
   const history           = useHistory()
 
   const logout = (e) => {
@@ -35,8 +36,15 @@ function Navbar({ children , props}) {
     else setUserData({})
   }
 
+  const checkTokenValidityUtils = () => {
+    const data = checkTokenValidity();
+    if (data) setValidity(data);
+    else setValidity(false)
+  }
+
   useEffect(()=>{
     HandlingGetUserData()
+    checkTokenValidityUtils()
   },[user])
 
   return (
@@ -78,7 +86,7 @@ function Navbar({ children , props}) {
             <div className="d-flex">
 
               {
-                checkTokenValidity ?
+                validity ?
                   <>
                     {/* <div className='my-3 d-flex align-items-center'>{email}</div>
                     <NavLink className='btn btn-outline-warning btn-sm my-4 mx-2 px-4' to="/dashboard" exact>Dashboard</NavLink>
@@ -100,7 +108,7 @@ function Navbar({ children , props}) {
                           <span className="d-none d-lg-inline-flex">{userData?.username ?? ''}</span>
                         </a>
                         <div className="dropdown-menu dropdown-menu-end bg-light rounded-0 rounded-bottom option-navbar-pilar m-0">
-                          <NavLink to="/dashboard" className="dropdown-item">
+                          <NavLink to="/akun" className="dropdown-item">
                             Dashboard
                           </NavLink>
                           <NavLink to="/profile" className="dropdown-item">

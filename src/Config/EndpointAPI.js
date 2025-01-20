@@ -6,6 +6,7 @@ const endpoints = {
   getUser: `${API_BASE_URL}/user`,
   getUserDetail: `${API_BASE_URL}/user/`,
   uploadBukti: `${API_BASE_URL}/payment/upload-payment`,
+  verifikasi: `${API_BASE_URL}/payment/`,
   getAllContent: `${API_BASE_URL}/content/allContent`,
   uploadContent: `${API_BASE_URL}/content/postContent`,
   deleteContent: `${API_BASE_URL}/content/deleteContent/`,

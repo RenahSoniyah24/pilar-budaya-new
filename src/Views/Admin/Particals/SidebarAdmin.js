@@ -47,22 +47,23 @@ function SidebarAdmin({ children , sidebar}) {
             </div>
           </div>
           <div className="navbar-nav w-100">
-            <NavLink to="/dashboard" className="nav-item nav-link py-3" activeClassName='active' exact>
-              <GiPieChart size={18} className="mx-2" />
-              Dashboard
-            </NavLink>
-            <NavLink to="/akun" className="nav-item nav-link py-3" activeClassName='active' exact>
-              <FaRegUser size={18} className="mx-2" />
-              Akun
-            </NavLink>
-            <NavLink to="/iuran" className="nav-item nav-link py-3" activeClassName='active'>
-              <FaWallet size={18} className="mx-2" />
-              Iuran
-            </NavLink>
-            <NavLink to="/post" className="nav-item nav-link py-3" activeClassName='active'>
-              <FaFileAlt size={18} className="mx-2" />
-              Post
-            </NavLink>
+            {
+              userData?.role === 'Admin' && 
+              <>
+                <NavLink to="/akun" className="nav-item nav-link py-3" activeClassName='active' exact>
+                  <FaRegUser size={18} className="mx-2" />
+                  Akun
+                </NavLink>
+                <NavLink to="/iuran" className="nav-item nav-link py-3" activeClassName='active'>
+                  <FaWallet size={18} className="mx-2" />
+                  Iuran
+                </NavLink>
+                <NavLink to="/post" className="nav-item nav-link py-3" activeClassName='active'>
+                  <FaFileAlt size={18} className="mx-2" />
+                  Post
+                </NavLink>
+              </>
+            }
           </div>
         </nav>
       </div>

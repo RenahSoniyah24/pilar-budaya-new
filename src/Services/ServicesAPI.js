@@ -212,3 +212,19 @@ export const getPelatihService = async () => {
     throw error.response ? error.response.data : error;
   }
 };
+
+export const verifikasiService = async (id) => {
+  try {
+    const req = { };
+    console.debug('[REQUEST verifikasiService]', req)
+
+    const response = await api.put(`${endpoints.verifikasi}${id}`, req);
+    
+    console.debug('[RESPONSE verifikasiService]', response.data)
+  
+    return response.data;
+  } catch (error) {
+    console.error('Error during verifikasiService:', error.response || error);
+    throw error.response ? error.response.data : error;
+  }
+};

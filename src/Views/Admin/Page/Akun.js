@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaRegUser, FaCheck } from "react-icons/fa";
-import { getUserService, getUserDetailService } from '../../../Services/ServicesAPI';
+import Notification from '../../../Components/Notification';
+import { getUserService, getUserDetailService, verifikasiService } from '../../../Services/ServicesAPI';
 import { formatDateToIndonesian, getLatestPayment } from '../../../Formatter/Text';
 
 import 'antd/dist/reset.css';
@@ -93,6 +94,18 @@ function Akun(props) {
     setLoadingModal(false)
   };
 
+  const handleVerifikasi= async(val) => {
+    setLoadingModal(true)
+    let response = await verifikasiService(val.id);
+
+    if (response) {
+      Notification.success('Berhasil, ', 'Verifikasi Pembayaran Berhasil');
+    } else {
+      Notification.warning('Upps, ', 'Verifikasi Pembayaran Gagal');
+    }
+    setLoadingModal(false)
+  };
+
   // fetch data on pagination change, sort change, or filter change
   useEffect(async() => {
     await fetchData();
@@ -175,7 +188,7 @@ function Akun(props) {
                   <p className="text-center mb-3" style={{ fontSize: "14px" }}>
                     Pendaftar
                   </p>
-                  <button className="btn btn-success btn-sm" disabled={dataModal?.status !== 'Pending'}>
+                  <button className="btn btn-success btn-sm" disabled={dataModal?.status !== 'Pending'} onClick={() =>  handleVerifikasi(dataModal?.id)}>
                     <FaCheck size={20} className="mx-2" /> {dataModal?.status !== 'Pending' ? 'Terverifikasi' : 'Verifikasi'}
                   </button>
                 </div>
