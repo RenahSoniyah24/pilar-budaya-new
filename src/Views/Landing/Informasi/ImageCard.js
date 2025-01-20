@@ -76,7 +76,7 @@ function GalleryCard({ image, name }) {
               objectFit: 'cover',
               borderRadius: '8px',
             }}
-            src={imageParse ? `https://drive.google.com/thumbnail?id=${imageParse}` : 'assets/images/default-image-payment.webp'}
+            src={imageParse ? `https://drive.google.com/thumbnail?id=${imageParse}&sz=s4000` : 'assets/images/default-image-payment.webp'}
             alt={name}
             onLoad={handleImageLoad}
             onError={handleImageError}

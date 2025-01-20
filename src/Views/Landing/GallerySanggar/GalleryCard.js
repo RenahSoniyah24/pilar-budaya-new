@@ -68,7 +68,7 @@ function GalleryCard({ image, name }) {
                 objectFit: 'cover', // Menjaga agar gambar tidak terdistorsi
                 borderRadius: '8px', // Opsi sudut bulat
               }}
-              src={imageParse ? `https://drive.google.com/thumbnail?id=${imageParse}` : 'assets/images/default-image-payment.webp'} 
+              src={imageParse ? `https://drive.google.com/thumbnail?id=${imageParse}&sz=s4000` : 'assets/images/default-image-payment.webp'} 
               alt={name} 
               onLoad={() => setIsLoading(false)}
               onError={(e) => {

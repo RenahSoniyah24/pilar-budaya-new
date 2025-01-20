@@ -172,7 +172,7 @@ function Post(props) {
               
               {isLoading && <div className="spinner">Loading...</div>}
               <img 
-                src={`https://drive.google.com/thumbnail?id=${dataModal?.imageUrl}`} 
+                src={`https://drive.google.com/thumbnail?id=${dataModal?.imageUrl}&sz=s4000`} 
                 className="img-fluid w-100" 
                 alt="Payment Proof"
                 onLoad={() => setIsLoading(false)}

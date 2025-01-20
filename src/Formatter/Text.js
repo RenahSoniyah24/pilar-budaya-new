@@ -9,26 +9,29 @@ export const formatDate = (isoString) => {
 }
 
 export const calculateAge = (birthdateString) => {
-  // Parse the birthdate string into a Date object
   const birthdate = new Date(birthdateString);
   if (isNaN(birthdate)) {
-    throw new Error('Invalid birthdate string');
+    return 0;
   }
 
   const today = new Date();
+
+  if (birthdate > today) {
+    return 0;
+  }
+
   let age = today.getFullYear() - birthdate.getFullYear();
 
-  // Adjust for cases where the birthdate hasn't occurred yet this year
   const isBeforeBirthday =
     today.getMonth() < birthdate.getMonth() ||
     (today.getMonth() === birthdate.getMonth() && today.getDate() < birthdate.getDate());
-  
+
   if (isBeforeBirthday) {
     age--;
   }
 
   return age;
-}
+};
 
 export const getFileIdFromDriveUrl  = (url) => {
   const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -78,4 +81,24 @@ export const getLatestPayment = (payments) => {
   // Sort by uploadDate in descending order and return the first item
   const sortedPayments = payments.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
   return sortedPayments[0] || null;
+};
+
+export const getCurrentMonth = () => {
+  const months = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+
+  const currentMonthIndex = new Date().getMonth(); // Mendapatkan indeks bulan (0-11)
+  return months[currentMonthIndex];
 };

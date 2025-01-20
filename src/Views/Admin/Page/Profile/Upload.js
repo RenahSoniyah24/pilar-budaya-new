@@ -35,6 +35,7 @@ const previewStyle = {
 };
 
 function Upload(props) {
+  const [loading, setLoading]       = useState(false)
   const [namaKonten, setNamaKonten] = useState('');
   const [periode, setPeriode] = useState('');
   const [files, setFiles] = useState([]);
@@ -72,15 +73,18 @@ function Upload(props) {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const response = await uploadBuktiService(userData.id, periode, files);
       if (response.data) {
         Notification.success('Berhasil, ', 'Upload Bukti Berhasil');
         setPeriode('')
         setFiles('')
+        setLoading(false);
       } else {
         throw new Error('Failed to login');
       }
     } catch (err) {
+      setLoading(false);
       console.error('Error:', err.message || err);
       Notification.success('Gagal, ', 'Upload Bukti Gagal');
       setPeriode('')
@@ -131,8 +135,15 @@ function Upload(props) {
           </div>
         </div>
         <div className="form-group">
-          <button type="submit" className="form-control btn btn-primary rounded submit px-3">
-            Kirim
+          <button type="submit" disabled={loading} className="form-control btn btn-primary rounded submit px-3">
+            {
+              loading ? (
+                <span>
+                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Loading...
+                </span>
+              ) : 'Kirim'
+            }
           </button>
         </div>
       </form>

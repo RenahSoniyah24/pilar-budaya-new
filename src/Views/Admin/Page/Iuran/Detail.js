@@ -165,7 +165,7 @@ function IuranDetail(props) {
               
               {isLoading && <div className="spinner">Loading...</div>}
               <img 
-                src={`https://drive.google.com/thumbnail?id=${dataModal?.fileId}`} 
+                src={`https://drive.google.com/thumbnail?id=${dataModal?.fileId}&sz=s4000`} 
                 className="img-fluid w-100" 
                 alt="Payment Proof"
                 onLoad={() => setIsLoading(false)}

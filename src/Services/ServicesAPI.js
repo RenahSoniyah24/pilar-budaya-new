@@ -1,6 +1,9 @@
 import axios from 'axios';
 import endpoints from '../Config/EndpointAPI';
 import { getSecureData } from '../Utils/Protect';
+import {  
+  getCurrentMonth
+} from '../../src/Formatter/Text';
 
 const userData = getSecureData()
 
@@ -14,7 +17,6 @@ const api = axios.create({
 });
 
 export const loginService = async (email, password) => {
-  debugger
   try {
     const req = { email, password };
     console.debug('[REQUEST LOGIN]', req)
@@ -30,12 +32,41 @@ export const loginService = async (email, password) => {
   }
 };
 
-export const registerService = async (fullName, username, email, phoneNumber, birthDate, password) => {
+export const registerService = async (fullName, username, email, phoneNumber, birthDate, password, paymentProof) => {
   try {
-    const req = { fullName, username, email, phoneNumber, birthDate, password };
-    console.debug('[REQUEST REGISTER]', req)
+    if (!Array.isArray(paymentProof) || !paymentProof[0] || !(paymentProof[0] instanceof File)) {
+      throw new Error('paymentProof must be an array containing a valid File object.');
+    }
 
-    const response = await api.post(endpoints.register, req);
+    const file = paymentProof[0];
+    const formData = new FormData();    
+    const periode = getCurrentMonth()
+    formData.append('fullName', fullName);
+    formData.append('username', username);
+    formData.append('email', email);
+    formData.append('phoneNumber', phoneNumber);
+    formData.append('birthDate', birthDate);
+    formData.append('password', password);
+    formData.append('paymentPeriod', periode);
+    formData.append('paymentProof', file, file.name || 'file.png');
+
+    console.debug('[REQUEST registerService]', {
+      fullName,
+      username,
+      email,
+      phoneNumber,
+      birthDate,
+      password,
+      periode,
+      paymentProof: file,
+    });
+
+    const response = await api.post(endpoints.register, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'access_token': userData?.access_token ?? '',
+      },
+    });
     
     console.debug('[RESPONSE REGISTER]', response.data)
     

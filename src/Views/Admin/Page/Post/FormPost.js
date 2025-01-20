@@ -36,6 +36,7 @@ const previewStyle = {
 
 function FormPost(props) {
   const { identifier } = useParams();
+  const [loading, setLoading]     = useState(false)
   const [namaKonten, setNamaKonten] = useState('');
   const [halaman, setHalaman] = useState('');
   const [keterangan, setKeterangan] = useState('');
@@ -66,6 +67,7 @@ function FormPost(props) {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const response = await uploadContentService(namaKonten, halaman, keterangan, files);
       if (response.data) {
         Notification.success('Berhasil, ', 'Upload Content Berhasil');
@@ -73,10 +75,12 @@ function FormPost(props) {
         setHalaman('')
         setKeterangan('')
         setFiles('')
+        setLoading(false);
       } else {
         throw new Error('Failed to login');
       }
     } catch (err) {
+      setLoading(false);
       console.error('Error:', err.message || err);
       setNamaKonten('')
       setHalaman('')
@@ -148,8 +152,15 @@ function FormPost(props) {
           />
         </div>
         <div className="form-group">
-          <button type="submit" className="form-control btn btn-primary rounded submit px-3">
-            Unggah
+          <button type="submit" disabled={loading} className="form-control btn btn-primary rounded submit px-3">
+            {
+              loading ? (
+                <span>
+                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Loading...
+                </span>
+              ) : 'Unggah'
+            }
           </button>
         </div>
       </form>

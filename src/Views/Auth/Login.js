@@ -11,7 +11,7 @@ import User from '../../Store';
 
 
 function Login(props) {
-
+  const [loading, setLoading]     = useState(false)
   const [user, setUser]           = useRecoilState(User)
   const [email, setEmail]         = useState('')
   const [katasandi, setKatasandi] = useState('')
@@ -21,8 +21,8 @@ function Login(props) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
     try {
+      setLoading(true);
       let response = await loginService(email, katasandi);
 
       if (response) {
@@ -41,12 +41,13 @@ function Login(props) {
         })
 
         Notification.success('Selamat Datang', `${response.username}`);
-  
+        setLoading(false);
         history.push('/') 
       } else {
         throw new Error("Failed to login")
       }
     } catch (err) {
+      setLoading(false);
       removeSecureData()
 
       setUser({
@@ -126,7 +127,16 @@ function Login(props) {
                       />
                     </div>
                     <div className="form-group">
-                      <button type="submit" className="form-control btn btn-primary rounded submit px-3">Masuk</button>
+                      <button type="submit" disabled={loading} className="form-control btn btn-primary rounded submit px-3">
+                        {
+                          loading ? (
+                            <span>
+                              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                              Loading...
+                            </span>
+                          ) : 'Masuk'
+                        }
+                      </button>
                     </div>
                     <div className="form-group d-md-flex">
                       {/* <div className="w-50 text-md-right">

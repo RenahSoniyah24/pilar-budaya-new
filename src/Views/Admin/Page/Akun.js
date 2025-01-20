@@ -3,6 +3,9 @@ import { FaRegUser, FaCheck } from "react-icons/fa";
 import Notification from '../../../Components/Notification';
 import { getUserService, getUserDetailService, verifikasiService } from '../../../Services/ServicesAPI';
 import { formatDateToIndonesian, getLatestPayment } from '../../../Formatter/Text';
+import {  
+  calculateAge
+} from '../../../../src/Formatter/Text';
 
 import 'antd/dist/reset.css';
 import { Table } from 'antd';
@@ -95,7 +98,6 @@ function Akun(props) {
   };
 
   const handleVerifikasi= async(val) => {
-    debugger
     setLoadingModal(true)
     let response = await verifikasiService(val);
 
@@ -200,8 +202,17 @@ function Akun(props) {
                   <p className="text-center mb-3" style={{ fontSize: "14px" }}>
                     Pendaftar
                   </p>
-                  <button className="btn btn-success btn-sm" disabled={dataModal?.isActive} onClick={() =>  handleVerifikasi(dataModal?.id)}>
-                    <FaCheck size={20} className="mx-2" /> {dataModal?.isActive ? 'Terverifikasi' : 'Verifikasi'}
+                  <button className="btn btn-success btn-sm" disabled={dataModal?.isActive || loadingModal} onClick={() =>  handleVerifikasi(dataModal?.id)}>
+                    {
+                      loadingModal ? (
+                        <span>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                          Loading...
+                        </span>
+                      ) : <>
+                        <FaCheck size={20} className="mx-2" /> {dataModal?.isActive ? 'Terverifikasi' : 'Verifikasi'}
+                      </>
+                    }
                   </button>
                 </div>
 
@@ -215,7 +226,7 @@ function Akun(props) {
                     <strong>Email:</strong> <span>{dataModal?.email ?? '-'}</span>
                   </div>
                   <div>
-                    <strong>Umur:</strong> <span>{dataModal?.id ?? '-'} Tahun</span>
+                    <strong>Umur:</strong> <span>{dataModal?.birthDate ? calculateAge(dataModal?.birthDate) : '-'} Tahun</span>
                   </div>
                   <div>
                     <strong>Tanggal Daftar:</strong> <span>{loadingModal ? '-' : (formatDateToIndonesian(dataModal?.birthDate) ?? '-')}</span>
@@ -226,7 +237,7 @@ function Akun(props) {
                       !loadingModal ? 
                         <>
                           <img 
-                            src={`https://drive.google.com/thumbnail?id=${dataModal?.latestPayment?.fileId}`} 
+                            src={`https://drive.google.com/thumbnail?id=${dataModal?.latestPayment?.fileId}&sz=s4000`} 
                             className="img-fluid" 
                             alt="Payment Proof"
                             onError={(e) => { 
