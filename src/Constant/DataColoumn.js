@@ -1,11 +1,10 @@
-import {  
-  formatDate,
-  formatRupiah
-} from '../../src/Formatter/Text';
-import { FaRegCheckCircle, FaEye, FaPencilAlt, FaTrash } from "react-icons/fa";
-import { FaCircleXmark } from "react-icons/fa6";
-import { NavLink } from 'react-router-dom';
+import { formatDate, formatRupiah } from '../../src/Formatter/Text';
+import { FaRegCheckCircle, FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa';
+import { FaCircleXmark } from 'react-icons/fa6';
+import { TfiLayoutLineSolid } from 'react-icons/tfi';
 
+import { NavLink } from 'react-router-dom';
+//test
 export const coloumn_pengguna = [
   {
     title: 'Nama',
@@ -25,7 +24,12 @@ export const coloumn_pengguna = [
     dataIndex: 'gender',
     width: '20%',
     align: 'center',
-    render: (gender) => gender == 'female' ? <span className="badge bg-success">Success</span> : <span className="badge bg-danger">Gagal</span>,
+    render: (gender) =>
+      gender == 'female' ? (
+        <span className="badge bg-success">Success</span>
+      ) : (
+        <span className="badge bg-danger">Gagal</span>
+      ),
     filters: [
       {
         text: 'Sukses',
@@ -63,7 +67,12 @@ export const coloumn_pendaftar = (handleDataModal) => [
     dataIndex: 'isActive',
     width: '20%',
     align: 'center',
-    render: (isActive) => isActive ? <FaRegCheckCircle size={15} color="green"/> : <FaCircleXmark size={15} color="red"/>,
+    render: (isActive) =>
+      isActive ? (
+        <FaRegCheckCircle size={15} color="green" />
+      ) : (
+        <FaCircleXmark size={15} color="red" />
+      ),
     filters: [
       {
         text: 'Terverifikasi',
@@ -81,8 +90,19 @@ export const coloumn_pendaftar = (handleDataModal) => [
     key: 'operation',
     fixed: 'right',
     width: 100,
-    align: "center",
-    render: (text, record) => <button type="button" className="btn btn-sm btn-info px-1" data-bs-toggle="modal"  data-bs-target="#detail" style={{paddingTop: "0.01rem", paddingBottom: "0.1rem"}} onClick={() => handleDataModal(record)}><FaEye size={15} color="white"/></button>,
+    align: 'center',
+    render: (text, record) => (
+      <button
+        type="button"
+        className="btn btn-sm btn-info px-1"
+        data-bs-toggle="modal"
+        data-bs-target="#detail"
+        style={{ paddingTop: '0.01rem', paddingBottom: '0.1rem' }}
+        onClick={() => handleDataModal(record)}
+      >
+        <FaEye size={15} color="white" />
+      </button>
+    ),
   },
 ];
 
@@ -103,7 +123,12 @@ export const coloumn_iuran = [
     dataIndex: 'isActive',
     width: '20%',
     align: 'center',
-    render: (isActive) => isActive ? <FaRegCheckCircle size={15} color="green"/> : <FaCircleXmark size={15} color="red"/>,
+    render: (isActive) =>
+      isActive ? (
+        <FaRegCheckCircle size={15} color="green" />
+      ) : (
+        <FaCircleXmark size={15} color="red" />
+      ),
     filters: [
       {
         text: 'Terverifikasi',
@@ -121,42 +146,109 @@ export const coloumn_iuran = [
     key: 'operation',
     fixed: 'right',
     width: '20%',
-    align: "center",
-    render: (text, record) => <NavLink to={`/iuran/${record.id}`} className="btn btn-sm btn-info px-1 text-decoration-none" style={{paddingTop: "0.01rem", paddingBottom: "0.1rem"}}><FaEye size={15} color="white"/></NavLink>,
+    align: 'center',
+    render: (text, record) => (
+      <NavLink
+        to={`/iuran/${record.id}`}
+        className="btn btn-sm btn-info px-1 text-decoration-none"
+        style={{ paddingTop: '0.01rem', paddingBottom: '0.1rem' }}
+      >
+        <FaEye size={15} color="white" />
+      </NavLink>
+    ),
   },
 ];
 
-export const coloumn_detail_iuran = (handleDataModal) => [
+export const coloumn_detail_iuran = (handleDataModal, handleVerifikasi) => [
+  {
+    title: 'Jenis',
+    dataIndex: 'proofPath',
+    fixed: 'right',
+    width: 100,
+    render: (proofPath) => {
+      return proofPath
+        ? proofPath.charAt(0).toUpperCase() + proofPath.slice(1).toLowerCase()
+        : '-';
+    },
+    align: 'center',
+  },
   {
     title: 'Bulan Pembayaran',
     dataIndex: 'paymentPeriod',
     sorter: true,
-    width: '20%',
+    width: '15%',
   },
   {
     title: 'Tanggal Bayar',
     dataIndex: 'uploadDate',
     render: (uploadDate) => `${formatDate(uploadDate)}`,
-    width: '20%',
+    width: '15%',
+  },
+  {
+    title: 'Jumlah',
+    dataIndex: 'amount',
+    render: (amount) => `${formatRupiah(amount)}`,
+    fixed: 'right',
+    width: 100,
+    align: 'center',
   },
   {
     title: 'Bukti',
     dataIndex: 'fileId',
     fixed: 'right',
     width: 100,
-    align: "center",
-    render: (text, record) => <button type="button" className="btn btn-sm btn-info px-1" data-bs-toggle="modal"  data-bs-target="#detail" style={{paddingTop: "0.01rem", paddingBottom: "0.1rem"}} onClick={() => handleDataModal(record)}>Gambar</button>,
+    align: 'center',
+    render: (text, record) => (
+      <button
+        type="button"
+        className="btn btn-sm btn-info px-1"
+        data-bs-toggle="modal"
+        data-bs-target="#detail"
+        style={{ paddingTop: '0.01rem', paddingBottom: '0.1rem' }}
+        onClick={() => handleDataModal(record)}
+      >
+        Gambar
+      </button>
+    ),
   },
   {
     title: 'Status',
     dataIndex: 'paymentStatus',
-    width: '20%',
+    width: '10%',
     align: 'center',
-    render: (paymentStatus) => paymentStatus == 'Pending' ? <span className="badge bg-info">Pending</span> : <span className="badge bg-success">Success</span> ,
+    render: (paymentStatus) =>
+      paymentStatus == 'Pending' ? (
+        <span className="badge bg-info">Pending</span>
+      ) : (
+        <span className="badge bg-success">Success</span>
+      ),
+
+    onFilter: (value, record) => record.paymentStatus === value,
+  },
+  {
+    title: 'Action',
+    dataIndex: 'paymentStatus',
+    width: 100,
+    align: 'center',
+    render: (paymentStatus, record) =>
+      paymentStatus === 'Success' ? (
+        <TfiLayoutLineSolid size={20} color="green" />
+      ) : (
+        <button
+          style={{
+            backgroundColor: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+          }}
+          onClick={() => handleVerifikasi(record.id)}
+        >
+          <FaRegCheckCircle size={20} color="green" />
+        </button>
+      ),
     filters: [
       {
         text: 'Berhasil',
-        value: 'Succes',
+        value: 'Success',
       },
       {
         text: 'Pending',
@@ -165,6 +257,7 @@ export const coloumn_detail_iuran = (handleDataModal) => [
     ],
     onFilter: (value, record) => record.paymentStatus === value,
   },
+
   // {
   //   title: 'Verifikasi',
   //   dataIndex: 'gender',
@@ -193,19 +286,33 @@ export const coloumn_post = (handleDataModal, handleDeleteConfirmation) => [
     width: '20%',
   },
   {
-      title: 'Cover / Banner',
-      dataIndex: 'imageUrl',
-      fixed: 'right',
-      width: 100,
-      align: "center",
-      render: (text, record) => <a href="a" data-bs-toggle="modal"  data-bs-target="#detail" onClick={() => handleDataModal(record)}>Preview Content</a>,
+    title: 'Cover / Banner',
+    dataIndex: 'imageUrl',
+    fixed: 'right',
+    width: 100,
+    align: 'center',
+    render: (text, record) => (
+      <a
+        href="a"
+        data-bs-toggle="modal"
+        data-bs-target="#detail"
+        onClick={() => handleDataModal(record)}
+      >
+        Preview Content
+      </a>
+    ),
   },
   {
     title: 'Halaman',
     dataIndex: 'page',
     width: '20%',
     align: 'center',
-    render: (page) => page == '1' ? <span className="badge bg-info">Profil Pelatih</span> : <span className="badge bg-info">Gallery</span> ,
+    render: (page) =>
+      page == '1' ? (
+        <span className="badge bg-info">Profil Pelatih</span>
+      ) : (
+        <span className="badge bg-info">Gallery</span>
+      ),
     filters: [
       {
         text: 'Profil Pelatih',
@@ -223,17 +330,19 @@ export const coloumn_post = (handleDataModal, handleDeleteConfirmation) => [
     key: 'operation',
     fixed: 'right',
     width: 100,
-    align: "center",
+    align: 'center',
     render: (text, record) => {
-      return <>
-        <button
-          onClick={() => handleDeleteConfirmation(record.id)}
-          className="btn btn-sm btn-danger px-1 mx-1 text-decoration-none"
-          style={{paddingTop: "0.01rem", paddingBottom: "0.1rem"}}
-        >
-          <FaTrash size={15} color="white"/>
-        </button>
-      </>
+      return (
+        <>
+          <button
+            onClick={() => handleDeleteConfirmation(record.id)}
+            className="btn btn-sm btn-danger px-1 mx-1 text-decoration-none"
+            style={{ paddingTop: '0.01rem', paddingBottom: '0.1rem' }}
+          >
+            <FaTrash size={15} color="white" />
+          </button>
+        </>
+      );
     },
   },
 ];
@@ -263,7 +372,12 @@ export const coloumn_status_pembayaran = [
     dataIndex: 'paymentStatus',
     width: '20%',
     align: 'center',
-    render: (paymentStatus) => paymentStatus == 'Pending' ? <span className="badge bg-info">Pending</span> : <span className="badge bg-success">Success</span> ,
+    render: (paymentStatus) =>
+      paymentStatus == 'Pending' ? (
+        <span className="badge bg-info">Pending</span>
+      ) : (
+        <span className="badge bg-success">Success</span>
+      ),
     filters: [
       {
         text: 'Berhasil',

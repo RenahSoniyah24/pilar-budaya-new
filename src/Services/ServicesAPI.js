@@ -1,30 +1,28 @@
 import axios from 'axios';
 import endpoints from '../Config/EndpointAPI';
 import { getSecureData } from '../Utils/Protect';
-import {  
-  getCurrentMonth
-} from '../../src/Formatter/Text';
+import { getCurrentMonth } from '../../src/Formatter/Text';
 
-const userData = getSecureData()
+const userData = getSecureData();
 
 const api = axios.create({
   // baseURL: endpoints, // Ganti jika ingin menggunakan base URL di sini
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
-    'access_token' : userData?.access_token??''
+    access_token: userData?.access_token ?? '',
   },
 });
 
 export const loginService = async (email, password) => {
   try {
     const req = { email, password };
-    console.debug('[REQUEST LOGIN]', req)
+    console.debug('[REQUEST LOGIN]', req);
 
     const response = await api.post(endpoints.login, req);
-    
-    console.debug('[RESPONSE LOGIN]', response.data)
-    
+
+    console.debug('[RESPONSE LOGIN]', response.data);
+
     return response.data;
   } catch (error) {
     console.error('Error during login:', error.response || error);
@@ -32,15 +30,29 @@ export const loginService = async (email, password) => {
   }
 };
 
-export const registerService = async (fullName, username, email, phoneNumber, birthDate, password, paymentProof) => {
+export const registerService = async (
+  fullName,
+  username,
+  email,
+  phoneNumber,
+  birthDate,
+  password,
+  paymentProof
+) => {
   try {
-    if (!Array.isArray(paymentProof) || !paymentProof[0] || !(paymentProof[0] instanceof File)) {
-      throw new Error('paymentProof must be an array containing a valid File object.');
+    if (
+      !Array.isArray(paymentProof) ||
+      !paymentProof[0] ||
+      !(paymentProof[0] instanceof File)
+    ) {
+      throw new Error(
+        'paymentProof must be an array containing a valid File object.'
+      );
     }
 
     const file = paymentProof[0];
-    const formData = new FormData();    
-    const periode = getCurrentMonth()
+    const formData = new FormData();
+    const periode = getCurrentMonth();
     formData.append('fullName', fullName);
     formData.append('username', username);
     formData.append('email', email);
@@ -64,12 +76,12 @@ export const registerService = async (fullName, username, email, phoneNumber, bi
     const response = await api.post(endpoints.register, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        'access_token': userData?.access_token ?? '',
+        access_token: userData?.access_token ?? '',
       },
     });
-    
-    console.debug('[RESPONSE REGISTER]', response.data)
-    
+
+    console.debug('[RESPONSE REGISTER]', response.data);
+
     return response.data;
   } catch (error) {
     console.error('Error during REGISTER:', error.response || error);
@@ -80,12 +92,12 @@ export const registerService = async (fullName, username, email, phoneNumber, bi
 export const getUserService = async (index, limit) => {
   try {
     const req = { index, limit };
-    console.debug('[REQUEST getUserService]', req)
+    console.debug('[REQUEST getUserService]', req);
 
     const response = await api.get(endpoints.getUser, req);
-    
-    console.debug('[RESPONSE getUserService]', response.data)
-    
+
+    console.debug('[RESPONSE getUserService]', response.data);
+
     return response.data;
   } catch (error) {
     console.error('Error during getUserService:', error.response || error);
@@ -93,30 +105,43 @@ export const getUserService = async (index, limit) => {
   }
 };
 
-export const getUserDetailService = async (id) => {
+export const getUserDetailService = async (id, paymentType) => {
   try {
-    const req = { };
-    console.debug('[REQUEST getUserDetailService]', req)
+    const req = { paymentType };
+    console.debug('[REQUEST getUserDetailService]', req);
 
     const response = await api.get(`${endpoints.getUserDetail}${id}`, req);
-    
-    console.debug('[RESPONSE getUserDetailService]', response.data)
-  
+
+    console.debug('[RESPONSE getUserDetailService]', response.data);
+
     return response.data;
   } catch (error) {
-    console.error('Error during getUserDetailService:', error.response || error);
+    console.error(
+      'Error during getUserDetailService:',
+      error.response || error
+    );
     throw error.response ? error.response.data : error;
   }
 };
 
-export const uploadBuktiService = async (userId, paymentPeriod, paymentProof) => {
+export const uploadBuktiService = async (
+  userId,
+  paymentPeriod,
+  paymentProof
+) => {
   try {
-    if (!Array.isArray(paymentProof) || !paymentProof[0] || !(paymentProof[0] instanceof File)) {
-      throw new Error('paymentProof must be an array containing a valid File object.');
+    if (
+      !Array.isArray(paymentProof) ||
+      !paymentProof[0] ||
+      !(paymentProof[0] instanceof File)
+    ) {
+      throw new Error(
+        'paymentProof must be an array containing a valid File object.'
+      );
     }
 
     const file = paymentProof[0];
-    const formData = new FormData();    
+    const formData = new FormData();
 
     formData.append('userId', userId);
     formData.append('paymentPeriod', paymentPeriod);
@@ -131,7 +156,7 @@ export const uploadBuktiService = async (userId, paymentPeriod, paymentProof) =>
     const response = await api.post(endpoints.uploadBukti, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        'access_token': userData?.access_token ?? '',
+        access_token: userData?.access_token ?? '',
       },
     });
 
@@ -147,27 +172,41 @@ export const uploadBuktiService = async (userId, paymentPeriod, paymentProof) =>
 export const getAllContentService = async () => {
   try {
     const req = {};
-    console.debug('[REQUEST getAllContentService]', req)
+    console.debug('[REQUEST getAllContentService]', req);
 
     const response = await api.get(endpoints.getAllContent, req);
-    
-    console.debug('[RESPONSE getAllContentService]', response.data)
-    
+
+    console.debug('[RESPONSE getAllContentService]', response.data);
+
     return response.data;
   } catch (error) {
-    console.error('Error during getAllContentService:', error.response || error);
+    console.error(
+      'Error during getAllContentService:',
+      error.response || error
+    );
     throw error.response ? error.response.data : error;
   }
 };
 
-export const uploadContentService = async (content, page, caption, paymentProof) => {
+export const uploadContentService = async (
+  content,
+  page,
+  caption,
+  paymentProof
+) => {
   try {
-    if (!Array.isArray(paymentProof) || !paymentProof[0] || !(paymentProof[0] instanceof File)) {
-      throw new Error('Banner must be an array containing a valid File object.');
+    if (
+      !Array.isArray(paymentProof) ||
+      !paymentProof[0] ||
+      !(paymentProof[0] instanceof File)
+    ) {
+      throw new Error(
+        'Banner must be an array containing a valid File object.'
+      );
     }
 
     const file = paymentProof[0];
-    const formData = new FormData();    
+    const formData = new FormData();
 
     formData.append('contentName', content);
     formData.append('page', page);
@@ -184,7 +223,7 @@ export const uploadContentService = async (content, page, caption, paymentProof)
     const response = await api.post(endpoints.uploadContent, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        'access_token': userData?.access_token ?? '',
+        access_token: userData?.access_token ?? '',
       },
     });
 
@@ -192,36 +231,42 @@ export const uploadContentService = async (content, page, caption, paymentProof)
 
     return response.data;
   } catch (error) {
-    console.error('Error during uploadContentService:', error.response || error);
+    console.error(
+      'Error during uploadContentService:',
+      error.response || error
+    );
     throw error.response ? error.response.data : error;
   }
 };
 
 export const deleteContentService = async (id) => {
   try {
-    const req = { };
-    console.debug('[REQUEST deleteContentService]', req)
+    const req = {};
+    console.debug('[REQUEST deleteContentService]', req);
 
     const response = await api.delete(`${endpoints.deleteContent}${id}`, req);
-    
-    console.debug('[RESPONSE deleteContentService]', response.data)
-  
+
+    console.debug('[RESPONSE deleteContentService]', response.data);
+
     return response.data;
   } catch (error) {
-    console.error('Error during deleteContentService:', error.response || error);
+    console.error(
+      'Error during deleteContentService:',
+      error.response || error
+    );
     throw error.response ? error.response.data : error;
   }
 };
 
 export const getGalleryService = async () => {
   try {
-    const req = { };
-    console.debug('[REQUEST getGalleryService]', req)
+    const req = {};
+    console.debug('[REQUEST getGalleryService]', req);
 
     const response = await api.get(`${endpoints.galleryContent}`, req);
-    
-    console.debug('[RESPONSE getGalleryService]', response.data)
-  
+
+    console.debug('[RESPONSE getGalleryService]', response.data);
+
     return response.data;
   } catch (error) {
     console.error('Error during getGalleryService:', error.response || error);
@@ -231,13 +276,13 @@ export const getGalleryService = async () => {
 
 export const getPelatihService = async () => {
   try {
-    const req = { };
-    console.debug('[REQUEST getPelatihService]', req)
+    const req = {};
+    console.debug('[REQUEST getPelatihService]', req);
 
     const response = await api.get(`${endpoints.pelatihContent}`, req);
-    
-    console.debug('[RESPONSE getPelatihService]', response.data)
-  
+
+    console.debug('[RESPONSE getPelatihService]', response.data);
+
     return response.data;
   } catch (error) {
     console.error('Error during getPelatihService:', error.response || error);
@@ -245,15 +290,15 @@ export const getPelatihService = async () => {
   }
 };
 
-export const verifikasiService = async (id) => {
+export const verifikasiService = async (userId, paymentId) => {
   try {
-    const req = { paymentStatus: 'Success' };
-    console.debug('[REQUEST verifikasiService]', req)
+    const req = { paymentStatus: 'Success', paymentId };
+    console.debug('[REQUEST verifikasiService]', req);
 
-    const response = await api.put(`${endpoints.verifikasi}${id}`, req);
-    
-    console.debug('[RESPONSE verifikasiService]', response.data)
-  
+    const response = await api.put(`${endpoints.verifikasi}${userId}`, req);
+
+    console.debug('[RESPONSE verifikasiService]', response.data);
+
     return response.data;
   } catch (error) {
     console.error('Error during verifikasiService:', error.response || error);
