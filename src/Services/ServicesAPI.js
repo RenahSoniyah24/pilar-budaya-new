@@ -305,3 +305,19 @@ export const verifikasiService = async (userId, paymentId) => {
     throw error.response ? error.response.data : error;
   }
 };
+
+export const getGraphService = async () => {
+  try {
+    const req = { };
+    console.debug('[REQUEST getGraphService]', req)
+
+    const response = await api.get(`${endpoints.dataGraph}`, req);
+    
+    console.debug('[RESPONSE getGraphService]', response.data)
+  
+    return response.data;
+  } catch (error) {
+    console.error('Error during getGraphService:', error.response || error);
+    throw error.response ? error.response.data : error;
+  }
+};

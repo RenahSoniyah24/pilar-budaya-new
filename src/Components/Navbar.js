@@ -134,6 +134,17 @@ function Navbar({ children, props }) {
                         <a href="#" onClick={logout} className="dropdown-item">
                           Log Out
                         </a>
+                        <div className="dropdown-menu dropdown-menu-end bg-light rounded-0 rounded-bottom option-navbar-pilar m-0">
+                          <NavLink to="/dashboard" className="dropdown-item">
+                            Dashboard
+                          </NavLink>
+                          <NavLink to="/profile" className="dropdown-item">
+                            My Profil
+                          </NavLink>
+                          <a href="#" onClick={logout} className="dropdown-item">
+                            Log Out
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -14,7 +14,7 @@ import Informasi from '../Views/Landing/Informasi/Index';
 import Gallery from '../Views/Landing/GallerySanggar/Index';
 
 // admin
-// import Dashboard from '../Views/Admin/Page/Dashboard';
+import Dashboard from '../Views/Admin/Page/Dashboard';
 import Iuran from '../Views/Admin/Page/Iuran/Index';
 import IuranDetail from '../Views/Admin/Page/Iuran/Detail';
 import Akun from '../Views/Admin/Page/Akun';
@@ -38,9 +38,9 @@ function Router(props) {
         <Route exact path='/gallery'>
           <Gallery/>
         </Route>
-        {/* <Route path='/dashboard'>
-          <Middleware.Authenticate render={<Dashboard/>}/>
-        </Route> */}
+        <Route path='/dashboard'>
+          <Middleware.Authenticate role='Admin' render={<Dashboard/>}/>
+        </Route>
         <Route path='/iuran' exact>
           <Middleware.Authenticate role='Admin' render={<Iuran/>}/>
         </Route>

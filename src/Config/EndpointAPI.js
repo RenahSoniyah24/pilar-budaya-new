@@ -12,6 +12,7 @@ const endpoints = {
   deleteContent: `${API_BASE_URL}/content/deleteContent/`,
   galleryContent: `${API_BASE_URL}/content/gallery`,
   pelatihContent: `${API_BASE_URL}/content/pelatih`,
+  dataGraph: `${API_BASE_URL}/payment/dataPendaftar`,
 };
 
 export default endpoints;

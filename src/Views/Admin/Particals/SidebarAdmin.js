@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { NavLink } from 'react-router-dom';
 import User from '../../../Store';
-import { FaFileAlt, FaRegUser, FaWallet } from "react-icons/fa";
+import { FaFileAlt, FaRegUser, FaWallet, FaChartPie } from "react-icons/fa";
 import { GiPieChart } from "react-icons/gi";
 import { getSecureData } from '../../../Utils/Protect';
 
@@ -50,6 +50,10 @@ function SidebarAdmin({ children , sidebar}) {
             {
               userData?.role === 'Admin' && 
               <>
+                <NavLink to="/dashboard" className="nav-item nav-link py-3" activeClassName='active' exact>
+                  <FaChartPie size={18} className="mx-2" />
+                  Dashboard
+                </NavLink>
                 <NavLink to="/akun" className="nav-item nav-link py-3" activeClassName='active' exact>
                   <FaRegUser size={18} className="mx-2" />
                   Akun
