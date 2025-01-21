@@ -43,7 +43,7 @@ export const formatRupiah = (amount) => {
     throw new Error('Input must be a number');
   }
   
-  return `Rp.${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+  return `Rp ${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
 }
 
 export function formatDateToIndonesian(dateStr) {

@@ -108,7 +108,7 @@ function Navbar({ children , props}) {
                           <span className="d-none d-lg-inline-flex">{userData?.username ?? ''}</span>
                         </a>
                         <div className="dropdown-menu dropdown-menu-end bg-light rounded-0 rounded-bottom option-navbar-pilar m-0">
-                          <NavLink to="/akun" className="dropdown-item">
+                          <NavLink to="/dashboard" className="dropdown-item">
                             Dashboard
                           </NavLink>
                           <NavLink to="/profile" className="dropdown-item">

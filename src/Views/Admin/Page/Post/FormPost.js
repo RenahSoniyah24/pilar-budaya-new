@@ -121,8 +121,8 @@ function FormPost(props) {
             required
           >
             <option value="" defaultValue></option>
-            <option value="1">Profil</option>
-            <option value="2">Gallery</option>
+            <option value="2">Profil</option>
+            <option value="1">Gallery</option>
           </select>
         </div>
         <div className="form-group mb-3">

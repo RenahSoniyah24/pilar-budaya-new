@@ -114,9 +114,9 @@ function Upload(props) {
             <option value="Juli">Juli</option>
             <option value="Agustus">Agustus</option>
             <option value="September">September</option>
-            <option value=">Oktober">Oktober</option>
-            <option value=">November">November</option>
-            <option value=">Desember">Desember</option>
+            <option value="Oktober">Oktober</option>
+            <option value="November">November</option>
+            <option value="Desember">Desember</option>
           </select>
         </div>
         <div className="form-group mb-3">
